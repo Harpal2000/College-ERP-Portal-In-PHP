@@ -144,8 +144,11 @@ if (isset($_GET['subject_code'])) {
                                                         onclick="toggleUpdateButton()"
                                                         data-id="<?php echo $row['subject_code'] ?>">Edit</button>
 
+                                                    <?php $sCode = $row['subject_code'] ?>
                                                     <button class="btn btn-sm btn-outline-danger delete_course"
+                                                        onclick="confirmDelete('<?php echo $sCode ?>')"
                                                         type="button">Delete</button>
+
                                                 </td>
                                             </tr>
                                             <?php
@@ -256,6 +259,27 @@ if (isset($_GET['subject_code'])) {
 
     </script>
 
+    <script>
+        function confirmDelete(subjectCode) {
+            alert(subjectCode);
+            if (confirm("Are you sure you want to delete this course?")) {
+
+                $.ajax({
+                    url: 'ajax2.php?action=delete_subject',
+                    method: 'POST',
+                    data: { subject_code: subjectCode },
+                    success: function (data) {
+                        alert('Data Delete successfully');
+                        setTimeout(function () {
+                            location.reload()
+                        }, 1000)
+                    }
+                })
+
+            }
+        }
+    </script>
+
 
     <script>
         $(document).ready(function () {
@@ -297,7 +321,7 @@ if (isset($_GET['subject_code'])) {
             })
         });
 
-        window.editModal = function ($title = '', $url = '', $size = "") {
+        window.editModal = function ($title = '', $url = '') {
             // alert($title)
             $.ajax({
                 url: $url,
@@ -323,8 +347,6 @@ if (isset($_GET['subject_code'])) {
                 }
             })
         }
-
-
     </script>
 
 

@@ -48,6 +48,24 @@ if (isset($_GET["action"]) && $_GET["action"] == "update_sub") {
     }
 }
 
+if (isset($_GET["action"]) && $_GET["action"] == "delete_subject") {
+    if (isset($_POST["subject_code"]) && !empty($_POST["subject_code"])) {
+
+        $subjectCode = $_POST["subject_code"];
+
+        $delete_query = "DELETE FROM subject_record WHERE subject_code = '$subjectCode'";
+
+        if (mysqli_query($connection, $delete_query)) {
+            $response["success"] = true;
+            $response["message"] = "Record deleted successfully";
+        } else {
+            $response["success"] = false;
+            $response["message"] = "Error inserting record";
+        }
+    }
+}
+
+
 if (isset($_GET["action"]) && $_GET["action"] == "manage-timetable") {
     if (isset($_POST) && !empty($_POST)) {
         $s_code = mysqli_real_escape_string($connection, $_POST['s_code']);
@@ -73,6 +91,34 @@ if (isset($_GET["action"]) && $_GET["action"] == "manage-timetable") {
         }
 
         mysqli_close($connection);
+    }
+}
+
+
+if (isset($_GET["action"]) && $_GET["action"] == "update_timetable") {
+    if (isset($_POST) && !empty($_POST)) {
+        $id = mysqli_real_escape_string($connection, $_POST['id']);
+        $s_code = mysqli_real_escape_string($connection, $_POST['s_code']);
+        $s_name = mysqli_real_escape_string($connection, $_POST['s_name']);
+        $sel_teach = mysqli_real_escape_string($connection, $_POST['sel_teach']);
+        $sem = mysqli_real_escape_string($connection, $_POST['sem']);
+        $sel_class = mysqli_real_escape_string($connection, $_POST['sel_class']);
+        $sub_day = mysqli_real_escape_string($connection, $_POST['sub_day']);
+        $start_time = mysqli_real_escape_string($connection, $_POST['start_time']);
+        $end_time = mysqli_real_escape_string($connection, $_POST['end_time']);
+        $sub_type = mysqli_real_escape_string($connection, $_POST['sub_type']);
+        $sub_gp = mysqli_real_escape_string($connection, $_POST['sub_gp']);
+        $room_no = mysqli_real_escape_string($connection, $_POST['room_no']);
+
+        $update_query = "UPDATE timetable SET subject_code = '$s_code', subject_name = '$s_name', faculty_name = '$sel_teach', start_time = '$start_time', end_time = '$end_time', semester = '$sem', lec_day = '$sub_day', room_no = '$room_no', subject_type= '$sub_type', class_group = '$sub_gp', class = '$sel_class' WHERE id = '$id'";
+
+        if (mysqli_query($connection, $update_query)) {
+            $response["success"] = true;
+            $response["message"] = "Record inserted successfully";
+        } else {
+            $response["success"] = false;
+            $response["message"] = "Error inserting record";
+        }
     }
 }
 

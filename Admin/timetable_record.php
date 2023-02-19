@@ -1,6 +1,16 @@
 <?php
 
 require '../connection.php';
+
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+    $qry = $connection->query("SELECT * FROM timetable where id =" . $id);
+    $rowCode = $qry->fetch_assoc();
+    foreach ($rowCode as $k => $val) {
+        $$k = $val;
+    }
+}
+
 ?>
 
 
@@ -73,7 +83,7 @@ require '../connection.php';
                                     Dashboard</button></a>
                             <button type="button" style="background-color:#356155;color:white;"
                                 class="btn btn-block btn-sm col-sm-2 py-2 ms-2" data-bs-toggle="modal"
-                                data-bs-target="#exampleModal">
+                                data-bs-target=".timeModal">
                                 <i class="bi bi-plus-lg"></i> Add Time-table Record
                             </button>
                         </span>
@@ -171,10 +181,11 @@ require '../connection.php';
                                                     </small></p>
                                             </td>
                                             <td class="text-center">
-                                                <button class="btn btn-sm btn-outline-primary edit_course"
+                                                <button class="btn btn-sm btn-outline-primary edit_timetable"
+                                                    onclick="toggleUpdateButton()" data-id="<?php echo $row['id'] ?>"
                                                     type="button">Edit</button>
                                                 <!-- <button class="btn btn-sm btn-outline-danger delete_course"
-                                                                                                                                                                                                                                                                                type="button">Delete</button> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                type="button">Delete</button> -->
                                             </td>
                                         </tr>
                                         <?php
@@ -193,15 +204,19 @@ require '../connection.php';
 
 
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade timeModal" id="timeTableModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header" style="background-color:#356155;color:white;">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Subjects</h5>
+                    <h5 class="modal-title editTitle" id="exampleModalLabel">Add Subjects</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <form action="" id="manage-timetable">
+                <div class="modal-body" id="updateTimeTableBody">
+                    <form action="" id="manage-timetable" class="editForm">
+                        <div class="hiddenFiled">
+                            <input type="hidden" name="id" value="<?php echo isset($id) ? $id : '' ?>">
+                        </div>
                         <div class="form-group row mb-4">
                             <div class="col-sm-4">
                                 <label for="s_code" class="form-label">Enter Subject code:</label>
@@ -316,7 +331,8 @@ require '../connection.php';
                         <div class="form-group row mb-4">
                             <div class="col-sm-4">
                                 <label for="room_no" class="form-label">Enter Lecture room-no:</label>
-                                <input type="text" class="form-control" name="room_no">
+                                <input type="text" class="form-control" name="room_no"
+                                    value="<?php echo isset($room_no) ? $room_no : '' ?>">
                             </div>
                             <div class="col-sm-4">
                                 <label for="sub_gp" class="form-label">Enter class Lecture Group:</label>
@@ -332,9 +348,14 @@ require '../connection.php';
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" style="background-color:#356155;color:white;" class="btn" id='submit'
-                        onclick="$('.modal form').submit()">Save Timetable</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        id="close-button">Close</button>
+
+                    <button type="button" style="display:block;background-color:#356155;color:white;" class="btn"
+                        id='submit' onclick="$('.modal form').submit()">Save Timetable</button>
+
+                    <button type="button" class="btn btn-primary" id='Update_btn'
+                        style="display:none;background-color:#356155;color:white;">Update Timetable</button>
                 </div>
             </div>
         </div>
@@ -353,6 +374,74 @@ require '../connection.php';
             $('#myTable').DataTable();
         });
 
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#Update_btn').click(function () {
+                $.ajax({
+                    url: 'ajax2.php?action=update_timetable',
+                    type: 'POST',
+                    data: $('.editForm').serialize(),
+                    success: function (data) {
+                        alert('Data updated successfully');
+                        setTimeout(function () {
+                            location.reload()
+                        }, 1000)
+                    }
+                });
+            });
+        });
+    </script>
+
+
+    <script>
+        $(document).ready(function () {
+            $('.edit_timetable').click(function () {
+                timeTableModal("Update Time-table Record's", "timetable_record.php?id=" + $(this).attr('data-id'));
+
+            })
+        });
+
+        window.timeTableModal = function ($title = '', $url = '') {
+            // alert($title)
+            $.ajax({
+                url: $url,
+                error: function (xhr, status, error) {
+                    console.error("Error in ajax request: " + error);
+                    alert("An error occurred: " + error);
+                },
+                success: function (response) {
+                    if (response) {
+                        var $container = $(response).find('#updateTimeTableBody');
+                        $('#timeTableModal .editTitle').html($title);
+                        $('#timeTableModal .modal-body').html($container);
+                        $('[id^="manage-timetable"]').prop('id', 'update-TimeTable');
+
+                        $('#timeTableModal').modal({
+                            show: true,
+                            backdrop: 'static',
+                            keyboard: false,
+                            focus: true
+                        });
+                        $('#timeTableModal').modal('show');
+                    }
+                }
+            })
+        }
+    </script>
+
+    <script>
+        function toggleUpdateButton() {
+            document.getElementById("submit").style.display = "none";
+            document.getElementById("Update_btn").style.display = "block";
+        }
+    </script>
+
+    <script>
+        document.getElementById("close-button").addEventListener("click", function () {
+            location.reload();
+        });
     </script>
 
     <script>
