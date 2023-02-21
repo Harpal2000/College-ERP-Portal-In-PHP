@@ -79,10 +79,11 @@ if (isset($_GET["action"]) && $_GET["action"] == "manage-timetable") {
         $sub_type = mysqli_real_escape_string($connection, $_POST['sub_type']);
         $sub_gp = mysqli_real_escape_string($connection, $_POST['sub_gp']);
         $room_no = mysqli_real_escape_string($connection, $_POST['room_no']);
+        $lec_sch = mysqli_real_escape_string($connection, $_POST['lec_sch']);
 
 
         // insert the data into the database
-        $sql = "INSERT INTO timetable (`subject_code`, `subject_name`, `faculty_name`, `start_time`,`end_time`, `semester`, `lec_day`, `room_no`, `subject_type`,`class_group`, `class`) VALUES ('$s_code', '$s_name', '$sel_teach', '$start_time','$end_time', '$sem', '$sub_day', '$room_no', '$sub_type','$sub_gp', '$sel_class')";
+        $sql = "INSERT INTO timetable (`subject_code`, `subject_name`, `faculty_name`, `start_time`,`end_time`, `semester`, `lec_day`, `room_no`, `subject_type`,`class_group`,`lec_sch`, `class`) VALUES ('$s_code', '$s_name', '$sel_teach', '$start_time','$end_time', '$sem', '$sub_day', '$room_no', '$sub_type','$sub_gp','$lec_sch', '$sel_class')";
 
         if (mysqli_query($connection, $sql)) {
             echo "Record inserted successfully";

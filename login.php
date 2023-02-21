@@ -46,8 +46,6 @@ session_start();
         $user = $_POST['username'];
         $pass = $_POST['password'];
 
-        echo $user;
-
         $Query = "select * from login where username = '$user' and password = '$pass'";
         echo $Query;
 
@@ -58,9 +56,11 @@ session_start();
                 if ($row["role"] == "Admin") {
                     $_SESSION['LoginAdmin'] = $row["username"];
                     header('Location: ../admin/admin-index.php');
+
                 } else if ($row["role"] == "Teacher" and $row["account"] == "Activate") {
                     $_SESSION['LoginTeacher'] = $row["username"];
                     header('Location: ../teacher/teachDash.php');
+
                 } else if ($row["role"] == "Student" and $row["account"] == "Activate") {
                     $_SESSION['LoginStudent'] = $row['username'];
                     header('Location: ../student/student-index.php');

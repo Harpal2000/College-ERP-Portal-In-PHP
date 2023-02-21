@@ -145,7 +145,7 @@ require '../connection.php';
         $gender = $_POST['gender'];
 
         $t_role = 'Teacher';
-        $acc_status = 'Active';
+        $acc_status = 'Activate';
 
         $current_date = date("Y-m-d");
 

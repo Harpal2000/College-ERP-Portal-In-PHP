@@ -1,0 +1,1 @@
+$subject_code = $_POST[str_replace(' ', '', $_POST['subject_code'])];

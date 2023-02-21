@@ -6,7 +6,7 @@ session_start();
 
 if (!isset($_SESSION['LoginTeacher'])) {
     echo "<script>alert('session break')</script>";
-    //header('Location:stuLogin.php');
+    header('Location:../login.php');
 }
 
 
@@ -21,7 +21,9 @@ if (!isset($_SESSION['LoginTeacher'])) {
 
 <body>
     <a href="../login.php"><button type="button">Main Dashboard</button></a>
-    <a href="../stuAtt.php"><button type="button">Daily Attendance</button></a>
+    <a href="../stuAtt.php?t_name=<?php echo $_SESSION['LoginTeacher']; ?>"><button type="button">Daily
+            Attendance</button></a>
+
     <h1>Welcome
         <?php echo $_SESSION['LoginTeacher']; ?>
     </h1>
@@ -66,10 +68,10 @@ if (!isset($_SESSION['LoginTeacher'])) {
                             <?php echo $data['subject_name']; ?>
                         </td>
                         <td>
-                            <?php echo $data['time_slot']; ?>
+                            <?php echo $data['start_time'] . " - " . $data['end_time']; ?>
                         </td>
                         <td>
-                            <?php echo $data['day']; ?>
+                            <?php echo $data['lec_day']; ?>
                         </td>
                         <td>
                             <?php echo $data['room_no']; ?>

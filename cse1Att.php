@@ -21,7 +21,39 @@ session_start();
 
 
     <center>
-        <h1>Your Today's Attendance</h1>
+        <?php if (isset($_GET['class_name'])) {
+            $class_name = $_GET['class_name'];
+        }
+        ?>
+        <?php if (isset($_GET['subject_code'])) {
+            $subject_code = $_GET['subject_code'];
+        }
+        ?>
+        <?php if (isset($_GET['t_name'])) {
+            $t_name = $_GET['t_name'];
+            $teach_record = "SELECT * FROM `teacher_record` WHERE t_name = '$t_name'";
+
+            $teach_result = mysqli_query($connection, $teach_record);
+            if (mysqli_num_rows($teach_result) > 0) {
+                while ($data = mysqli_fetch_assoc($teach_result)) {
+                    $teacher_id = $data['t_id'];
+                }
+            }
+
+            $teach_record = "SELECT * FROM `timetable` WHERE subject_code = '$subject_code' and faculty_name = '$t_name' and class= '$class_name' and lec_day = 'monday' ";
+
+            $teach_result = mysqli_query($connection, $teach_record);
+            if (mysqli_num_rows($teach_result) > 0) {
+                while ($data = mysqli_fetch_assoc($teach_result)) {
+                    $sub_id = $data['id'];
+                    $sub_name = $data['subject_name'];
+                }
+            }
+
+        } ?>
+        <h1>Your Today's Attendance
+            <?php echo $sub_id . "<br>" . $subject_code; ?>
+        </h1>
         <?php
         $query = "SELECT * FROM `student_record` WHERE class = 'CSE1'";
 
@@ -31,10 +63,10 @@ session_start();
 
         <table border='1' cellpadding='10'>
             <tr>
-                <td>Sr No.</td>
-                <td>Student Name</td>
-                <td>Student Roll No</td>
-                <td>Absent/Present</td>
+                <th>Sr No.</th>
+                <th>Student Name</th>
+                <th>Student Roll No</th>
+                <th>Absent/Present</th>
             </tr>
 
             <?php
@@ -56,9 +88,11 @@ session_start();
                         </td>
                         <td>
                             <form method="POST" action="">
-                                <input type="checkbox" name="check[]" value="<?php echo $data['s_name'] . "Absent"; ?>">A
-                                
-                                <input type="checkbox" name="check[]" value="<?php echo $data['s_name'] . "Present"; ?>">P
+                                <input type="checkbox" name="status[]"
+                                    value="<?php echo $data['roll_no'] . ',' . $data['s_name'] . ',' . $t_name . ',' . $subject_code . ',' . $sub_id . ',' . $sub_name . ',' . "Absent"; ?>">A
+
+                                <input type="checkbox" name="status[]"
+                                    value="<?php echo $data['roll_no'] . ',' . $data['s_name'] . ',' . $t_name . ',' . $subject_code . ',' . $sub_id . ',' . $sub_name . ',' . "Present"; ?>">P
 
                         </td>
                     </tr>
@@ -77,19 +111,34 @@ session_start();
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['s-att-data'])) {
 
-            if (!empty($_POST['check'])) {
+            if (!empty($_POST['status'])) {
 
-                foreach ($_POST['check'] as $lec){
-                    echo $lec . "<br>";
+                $alert_displayed = false;
+
+                foreach ($_POST['status'] as $lec) {
+                    list($roll_no, $stu_name, $teach_name, $sub_code, $sub_id, $sub_name, $att_status) = explode(',', $lec);
+                    // echo "<script>alert('roll_no: $roll_no, stu_name: $stu_name, teach_name: $teach_name, att_status: $att_status,sub_code: $sub_code,sub_name:$sub_name,sub_id:$sub_id')</script>";
+                    $current_date = date("Y-m-d");
+
+                    $sql = "INSERT INTO attendance_record (stu_roll_no,stu_name,teach_name,sub_code,sub_id,sub_name, att_status,att_date) VALUES ('$roll_no','$stu_name','$teach_name','$sub_code','$sub_id','$sub_name', '$att_status', '$current_date')";
+                    $result = mysqli_query($connection, $sql);
+
+                    if (!$result) {
+                        echo "Error: " . mysqli_error($connection);
+                    } else {
+                        $alert_displayed = true;
+                    }
+                }
+
+                if ($alert_displayed) {
+                    echo "<script>alert('Attendance Record Added Successfully');</script>";
                 }
 
             } else {
                 echo "Error!";
             }
 
-        } 
-
-
+        }
 
         ?>
     </center>

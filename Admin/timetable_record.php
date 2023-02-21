@@ -102,6 +102,7 @@ if (isset($_GET['id'])) {
                                     <th class="">Day</th>
                                     <th class="">Subject Type</th>
                                     <th class="">Class Group</th>
+                                    <th class="">Class Schedule</th>
                                     <th class="">Class</th>
                                     <th class="text-center">Action</th>
                                 </tr>
@@ -177,6 +178,11 @@ if (isset($_GET['id'])) {
                                             </td>
                                             <td class="">
                                                 <p><small>
+                                                        <?php echo $row['lec_sch'] ?>
+                                                    </small></p>
+                                            </td>
+                                            <td class="">
+                                                <p><small>
                                                         <?php echo $row['class'] ?>
                                                     </small></p>
                                             </td>
@@ -185,7 +191,7 @@ if (isset($_GET['id'])) {
                                                     onclick="toggleUpdateButton()" data-id="<?php echo $row['id'] ?>"
                                                     type="button">Edit</button>
                                                 <!-- <button class="btn btn-sm btn-outline-danger delete_course"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                type="button">Delete</button> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                type="button">Delete</button> -->
                                             </td>
                                         </tr>
                                         <?php
@@ -340,7 +346,15 @@ if (isset($_GET['id'])) {
                                     <option selected disabled>----select Lecture Group----</option>
                                     <option>G1</option>
                                     <option>G2</option>
+                                    <option>no-group</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-4">
+                                <label for="lec_sch" class="form-label">Enter class Lecture Schedule:</label>
+                                <select class="form-control" name="lec_sch">
+                                    <option selected disabled>----select Lecture Schedule----</option>
                                     <option>Combine</option>
+                                    <option>not-Combine</option>
                                 </select>
                             </div>
                         </div>

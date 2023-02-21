@@ -32,6 +32,7 @@ if (!isset($_SESSION['LoginStudent'])) {
         while ($data = mysqli_fetch_assoc($result)) {
             $Student_name = $data['s_name'];
             $Student_class = $data['class'];
+            $Student_group = $data['s_group'];
         }
 
     } else {
@@ -40,8 +41,10 @@ if (!isset($_SESSION['LoginStudent'])) {
 
     ?>
 
+
     <?php
-    $query2 = "select * from timetable where day = 'tuesday' and class= '$Student_class'";
+    $query2 = "SELECT * FROM timetable WHERE lec_day = 'monday' AND class = '$Student_class' AND class_group = '$Student_group' OR (lec_sch = 'combine' AND lec_day = 'monday' AND class = '$Student_class')";
+
 
     $result2 = mysqli_query($connection, $query2);
 
@@ -63,9 +66,18 @@ if (!isset($_SESSION['LoginStudent'])) {
                 <th>Class:
                     <?php echo $Student_class; ?>
                 </th>
+                <th>Group:
+                    <?php echo $Student_group; ?>
+                </th>
             </tr>
         </table>
         <table border='1' cellpadding='5' width='60%'>
+            <th>Subject Name</th>
+            <th>Teacher Name</th>
+            <th>Time-Slot</th>
+            <th>Day</th>
+            <th>Attendance</th>
+            <th>Total Attendance/Total Delivered</th>
 
             <?php
             if (mysqli_num_rows($result2) > 0) {
@@ -73,13 +85,57 @@ if (!isset($_SESSION['LoginStudent'])) {
                     ?>
                     <tr>
                         <td>
-                            <?php echo $data2['subject_code'] . '<br>' . $data2['subject_name'] . '<br>' . $data2['faculty_name']; ?>
+                            <?php echo $data2['subject_name'] . ' [ ' . $data2['subject_code'] . ']' . " <br> " . ' ( ' . $data2['subject_type'] . ' )' . ' ( ' . $data2['room_no'] . ' )'; ?>
                         </td>
                         <td>
-                            <?php echo $data2['time_slot'] . '<br>' . $data2['room_no']; ?>
+                            <?php echo $data2['faculty_name']; ?>
                         </td>
                         <td>
-                            <?php echo $data2['class']; ?>
+                            <?php echo $data2['start_time'] . " - " . $data2['end_time']; ?>
+                        </td>
+                        <td>
+                            <?php echo $data2['lec_day']; ?>
+                        </td>
+                        <td style="text-align:center; vertical-align:middle;">
+                            <?php
+                            $sub_id = $data2['id'];
+                            $query_att = "select * from attendance_record where sub_id = '$sub_id' and stu_roll_no = '$stu_roll_no'";
+
+                            $result_att = mysqli_query($connection, $query_att);
+
+                            $total_present = 0;
+                            if (mysqli_num_rows($result_att) > 0) {
+                                while ($data2 = mysqli_fetch_assoc($result_att)) {
+                                    if ($data2['att_status'] == '') {
+                                        echo 'N/A';
+                                    } else if ($data2['att_status'] == 'Absent' or $data2['att_status'] == 'Present') {
+                                        if ($data2['att_status'] == 'Present') {
+                                            $total_present++;
+                                        }
+                                        echo $data2['att_status'];
+                                    } else {
+                                        echo 'No Data Found';
+                                    }
+                                }
+                            } else {
+                                echo 'N/A';
+                            }
+                            ?>
+                        </td>
+                        <td style="text-align:center; vertical-align:middle;">
+                            <?php
+                            $query_lec = "select * from attendance_record where sub_id = '$sub_id' and stu_roll_no = '$stu_roll_no'";
+
+                            $result_lec = mysqli_query($connection, $query_lec);
+                            if (mysqli_num_rows($result_lec) > 0) {
+                                while ($data2 = mysqli_fetch_assoc($result_lec)) {
+                                    $delivered_lec = $data2['lec_no'];
+                                    echo "$total_present" . "/" . "$delivered_lec";
+                                }
+                            } else {
+                                echo 'N/A';
+                            }
+                            ?>
                         </td>
                     </tr>
 
