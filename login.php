@@ -59,7 +59,7 @@ session_start();
 
                 } else if ($row["role"] == "Teacher" and $row["account"] == "Activate") {
                     $_SESSION['LoginTeacher'] = $row["username"];
-                    header('Location: ../teacher/teachDash.php');
+                    header('Location: ../teacher/teacher-index.php');
 
                 } else if ($row["role"] == "Student" and $row["account"] == "Activate") {
                     $_SESSION['LoginStudent'] = $row['username'];

@@ -1,6 +1,6 @@
 <?php
 
-require 'connection.php';
+require '../connection.php';
 
 session_start();
 
@@ -17,7 +17,7 @@ session_start();
 
 <body>
     <a href="login.php"><button type="button">Main Page</button></a>
-    <a href="teachDash.php"><button type="button">My Dashboard</button></a>
+    <a href="../teacher/teacher-index.php"><button type="button">My Dashboard</button></a>
     <a href="stuAtt.php"><button type="button">Daily Attendance</button></a>
 
 
@@ -85,7 +85,7 @@ session_start();
                 echo "Error!";
             }
 
-        } 
+        }
 
 
         ?>

@@ -14,7 +14,14 @@ if (!isset($_SESSION['LoginStudent'])) {
 <html lang="en">
 
 <head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <title>Student Dashboard</title>
+    <style>
+        table {
+            width: 80% !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -50,16 +57,17 @@ if (!isset($_SESSION['LoginStudent'])) {
 
     ?>
 
-    <h1>Welcome
-        <?php echo $Student_name; ?>
-    </h1>
-
     <center>
         <h1>Your Daily Attendance</h1><br><br>
 
-        <table cellpadding='8' width='60%'>
+        <table cellpadding='8' class="table">
             <tr>
-                <th>Date: 31/01/2023</th>
+                <?php
+                $current_date = date("d-m-Y");
+                ?>
+                <th>Date:
+                    <?php echo $current_date ?>
+                </th>
                 <th>Roll No:
                     <?php echo $stu_roll_no; ?>
                 </th>
@@ -71,19 +79,25 @@ if (!isset($_SESSION['LoginStudent'])) {
                 </th>
             </tr>
         </table>
-        <table border='1' cellpadding='5' width='60%'>
+        <table cellpadding='6' class="table table-striped">
+            <th>S No</th>
             <th>Subject Name</th>
             <th>Teacher Name</th>
             <th>Time-Slot</th>
             <th>Day</th>
             <th>Attendance</th>
             <th>Total Attendance/Total Delivered</th>
+            <th>Total Attendance %</th>
 
             <?php
+            $i = 1;
             if (mysqli_num_rows($result2) > 0) {
                 while ($data2 = mysqli_fetch_assoc($result2)) {
                     ?>
                     <tr>
+                        <td>
+                            <?php echo $i++ ?>
+                        </td>
                         <td>
                             <?php echo $data2['subject_name'] . ' [ ' . $data2['subject_code'] . ']' . " <br> " . ' ( ' . $data2['subject_type'] . ' )' . ' ( ' . $data2['room_no'] . ' )'; ?>
                         </td>
@@ -99,7 +113,8 @@ if (!isset($_SESSION['LoginStudent'])) {
                         <td style="text-align:center; vertical-align:middle;">
                             <?php
                             $sub_id = $data2['id'];
-                            $query_att = "select * from attendance_record where sub_id = '$sub_id' and stu_roll_no = '$stu_roll_no'";
+                            $current_date = date("Y-m-d");
+                            $query_att = "select * from attendance_record where sub_id = '$sub_id' and stu_roll_no = '$stu_roll_no' and att_date = '$current_date'";
 
                             $result_att = mysqli_query($connection, $query_att);
 
@@ -110,9 +125,19 @@ if (!isset($_SESSION['LoginStudent'])) {
                                         echo 'N/A';
                                     } else if ($data2['att_status'] == 'Absent' or $data2['att_status'] == 'Present') {
                                         if ($data2['att_status'] == 'Present') {
-                                            $total_present++;
+                                            ?>
+                                                <button type="button" class="btn btn-success btn-sm">
+                                                <?php echo $data2['att_status']; ?>
+                                                </button>
+                                            <?php
+                                        } else {
+                                            ?>
+                                                <button type="button" class="btn btn-danger btn-sm">
+                                                <?php echo $data2['att_status']; ?>
+                                                </button>
+                                            <?php
                                         }
-                                        echo $data2['att_status'];
+
                                     } else {
                                         echo 'No Data Found';
                                     }
@@ -124,12 +149,17 @@ if (!isset($_SESSION['LoginStudent'])) {
                         </td>
                         <td style="text-align:center; vertical-align:middle;">
                             <?php
-                            $query_lec = "select * from attendance_record where sub_id = '$sub_id' and stu_roll_no = '$stu_roll_no'";
-
+                            $query_lec = "SELECT MAX(lec_no) AS max_lec FROM attendance_record WHERE sub_id = '$sub_id' AND stu_roll_no = '$stu_roll_no'";
                             $result_lec = mysqli_query($connection, $query_lec);
-                            if (mysqli_num_rows($result_lec) > 0) {
+                            if (mysqli_num_rows($result_lec) >= 0) {
                                 while ($data2 = mysqli_fetch_assoc($result_lec)) {
-                                    $delivered_lec = $data2['lec_no'];
+                                    $delivered_lec = $data2['max_lec'];
+
+                                    $query_count_att = "SELECT COUNT(*) AS count_att FROM attendance_record WHERE stu_name = '$Student_name' AND att_status = 'present' and sub_id = '$sub_id'";
+                                    $result_count_att = mysqli_query($connection, $query_count_att);
+                                    $data_count_att = mysqli_fetch_assoc($result_count_att);
+                                    $total_present = $data_count_att['count_att'];
+
                                     echo "$total_present" . "/" . "$delivered_lec";
                                 }
                             } else {
@@ -137,7 +167,18 @@ if (!isset($_SESSION['LoginStudent'])) {
                             }
                             ?>
                         </td>
+                        <td>
+                            <?php
+                            if ($delivered_lec == 0) {
+                                echo "0%";
+                            } else {
+                                $attendance_percentage = ($total_present / $delivered_lec) * 100;
+                                echo $attendance_percentage . "%";
+                            }
+                            ?>
+                        </td>
                     </tr>
+
 
                     <?php
                 }
