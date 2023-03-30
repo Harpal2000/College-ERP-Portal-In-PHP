@@ -43,9 +43,8 @@ if (isset($_POST['submit_assignment'])) {
         echo "<script>alert($assign_no)</script>";
         $assignment_file = $_FILES['assignment_file'];
 
-        // Validate uploaded file
         $allowed_extensions = ['pdf', 'doc', 'docx'];
-        $max_file_size = 10 * 1024 * 1024; // 10MB
+        $max_file_size = 10 * 1024 * 1024;
 
         if (
             $assignment_file['error'] == UPLOAD_ERR_OK &&
@@ -53,20 +52,15 @@ if (isset($_POST['submit_assignment'])) {
             $assignment_file['size'] <= $max_file_size
         ) {
 
-            // Generate unique name for file
             $file_name = uniqid() . '.' . pathinfo($assignment_file['name'], PATHINFO_EXTENSION);
 
-            // Move file to permanent location
+
             if (move_uploaded_file($assignment_file['tmp_name'], 'assignment_data/' . $file_name)) {
                 $class_name = $_POST['class_name'];
                 $subject_name = $_POST['subject_name'];
                 $subject_code = $_POST['subject_code'];
                 $semester = $_POST['semester'];
                 $assign_file = $file_name;
-                // $pdf_file = pathinfo($assign_file, PATHINFO_FILENAME) . '.pdf';
-
-
-                // $query = "INSERT INTO assignment_record (subject_code, subject_name, class, sem, assign_file, pdf_file) VALUES ('$subject_code', '$subject_name', '$class_name', '$semester', '$assign_file', '$pdf_file')";
 
                 $query = "INSERT INTO assignment_record (subject_code, subject_name, class, sem, assign_file,assign_no) VALUES ('$subject_code', '$subject_name', '$class_name', '$semester', '$assign_file','$assign_no')";
                 if (mysqli_query($connection, $query)) {
