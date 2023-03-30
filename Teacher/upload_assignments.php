@@ -23,6 +23,14 @@ if (!isset($_SESSION['LoginTeacher'])) {
         table {
             width: 70% !important;
         }
+
+        #as_no {
+            width: 50% !important;
+        }
+
+        .form-control:focus {
+            box-shadow: none;
+        }
     </style>
 
 </head>
@@ -30,8 +38,9 @@ if (!isset($_SESSION['LoginTeacher'])) {
 <?php
 
 if (isset($_POST['submit_assignment'])) {
-    // Check if file has been uploaded
     if (isset($_FILES['assignment_file'])) {
+        $assign_no = $_POST['assignment_no'];
+        echo "<script>alert($assign_no)</script>";
         $assignment_file = $_FILES['assignment_file'];
 
         // Validate uploaded file
@@ -49,31 +58,27 @@ if (isset($_POST['submit_assignment'])) {
 
             // Move file to permanent location
             if (move_uploaded_file($assignment_file['tmp_name'], 'assignment_data/' . $file_name)) {
-                // Insert assignment details into database using prepared statement
                 $class_name = $_POST['class_name'];
                 $subject_name = $_POST['subject_name'];
                 $subject_code = $_POST['subject_code'];
                 $semester = $_POST['semester'];
                 $assign_file = $file_name;
-                $query = "INSERT INTO assignment_record (subject_code, subject_name, class, sem, assign_file) VALUES ('$subject_code', '$subject_name', '$class_name', '$semester', '$assign_file')";
-                //echo $Query; // to check for syntax error
+                // $pdf_file = pathinfo($assign_file, PATHINFO_FILENAME) . '.pdf';
+
+
+                // $query = "INSERT INTO assignment_record (subject_code, subject_name, class, sem, assign_file, pdf_file) VALUES ('$subject_code', '$subject_name', '$class_name', '$semester', '$assign_file', '$pdf_file')";
+
+                $query = "INSERT INTO assignment_record (subject_code, subject_name, class, sem, assign_file,assign_no) VALUES ('$subject_code', '$subject_name', '$class_name', '$semester', '$assign_file','$assign_no')";
                 if (mysqli_query($connection, $query)) {
-                    echo "<script>alert('Register Successfully');setTimeout(function () {
-                            location.reload()
-                        }, 1000)</script>";
+                    echo "<script>alert('Assignment uploaded successfully.');</script>";
 
                 } else {
                     echo "Error in Query: " . $Query . "<br>" . mysqli_error($connection);
                 }
-
-                // Display success message
-                echo "<script>alert('Assignment uploaded successfully.')</script>";
             } else {
-                // Display error message
                 echo "<script>alert('Failed to upload assignment. Please try again.')</script>";
             }
         } else {
-            // Display error message
             echo "<script>alert('Invalid file format or size. Only PDF, DOC, and DOCX files are allowed with a maximum size of 10MB.')</script>";
         }
     }
@@ -86,21 +91,33 @@ if (isset($_POST['submit_assignment'])) {
 <body>
     <center class="mt-5">
         <?php
+
         if (isset($_GET['t_name'])) {
             $t_name = $_GET['t_name'];
         }
-        $query = "SELECT * FROM `timetable` WHERE faculty_name = '$t_name' and subject_type = 'lecture'";
+        $query = "SELECT DISTINCT subject_name,subject_code,class,semester FROM `timetable` WHERE faculty_name =
+        '$t_name' and subject_type = 'lecture'";
         $result = mysqli_query($connection, $query);
         ?>
-        <h1>Select Class and Subject</h1>
+        <h1 class="display-3">Upload Your Assignments Here</h1>
+        <hr color="black" width="70%">
         <table border="1" class="table table-condensed table-bordered table-hover mt-4">
+            <caption align="top">Assignment-1</caption>
             <tr align="center">
                 <th>subject_code</th>
                 <th>Subject_name</th>
                 <th>class</th>
                 <th>Upload Assignment</th>
+                <th>View Assignment</th>
             </tr>
             <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+                <?php
+                $assign_no = 1;
+                $subject_code = $row['subject_code'];
+                $ass_record_query = "SELECT * FROM `assignment_record` WHERE subject_code = '$subject_code' AND assign_no = $assign_no";
+                $ass_record_result = mysqli_query($connection, $ass_record_query);
+                $already_uploaded = mysqli_num_rows($ass_record_result) > 0;
+                ?>
                 <tr align="center">
                     <td>
                         <?php echo $row['subject_code']; ?>
@@ -112,12 +129,120 @@ if (isset($_POST['submit_assignment'])) {
                         <?php echo $row['class']; ?>
                     </td>
                     <td>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                            data-class="<?php echo $row['class']; ?>" data-subject="<?php echo $row['subject_name']; ?>"
-                            data-sem="<?php echo $row['semester']; ?>" data-code="<?php echo $row['subject_code']; ?>"
-                            data-target="#assignmentModal">Upload
-                            Assignment</button>
+                        <?php if ($already_uploaded) { ?>
+                            Already Uploaded
+                        <?php } else { ?>
+                            <button type="button" class="btn btn-primary" onclick="fetchInputValue()" data-bs-toggle="modal"
+                                data-class="<?php echo $row['class']; ?>" data-subject="<?php echo $row['subject_name']; ?>"
+                                data-sem="<?php echo $row['semester']; ?>" data-code="<?php echo $subject_code; ?>"
+                                data-target="#assignmentModal">Upload Assignment</button>
+                        <?php } ?>
                     </td>
+                    <td>
+                        <?php
+                        $assign_no = 1;
+                        $ass_record_query = "SELECT assign_file FROM `assignment_record` WHERE subject_code = '$subject_code' AND assign_no = $assign_no";
+                        $ass_record_result = mysqli_query($connection, $ass_record_query);
+                        $already_uploaded = mysqli_num_rows($ass_record_result) > 0;
+
+                        if ($already_uploaded) {
+                            while ($row = mysqli_fetch_assoc($ass_record_result)) {
+                                $assign_file = $row['assign_file'];
+                                ?>
+                                <a href="assignment_data/<?php echo $row['assign_file']; ?>" target="_blank"><button type="button"
+                                        class="btn btn-primary btn-sm">
+                                        Download
+                                    </button></a>
+                                <?php
+                            }
+                        } else {
+                            ?>
+                            <button type="button" class="btn btn-danger btn-sm" disabled>
+                                Not Uploaded yet!
+                            </button>
+                            <?php
+                        } ?>
+                    </td>
+
+                </tr>
+            <?php } ?>
+        </table>
+
+
+
+        <!-- Assignment-2 -->
+        <?php
+
+        if (isset($_GET['t_name'])) {
+            $t_name = $_GET['t_name'];
+        }
+        $query = "SELECT DISTINCT subject_name,subject_code,class,semester FROM `timetable` WHERE faculty_name =
+        '$t_name' and subject_type = 'lecture'";
+        $result = mysqli_query($connection, $query);
+        ?>
+        <table border="1" class="table table-condensed table-bordered table-hover mt-4">
+            <caption align="top">Assignment-2</caption>
+            <tr align="center">
+                <th>subject_code</th>
+                <th>Subject_name</th>
+                <th>class</th>
+                <th>Upload Assignment</th>
+                <th>View Assignment</th>
+            </tr>
+            <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+                <?php
+                $assign_no = 2;
+                $subject_code = $row['subject_code'];
+                $ass_record_query = "SELECT * FROM `assignment_record` WHERE subject_code = '$subject_code' AND assign_no = $assign_no";
+                $ass_record_result = mysqli_query($connection, $ass_record_query);
+                $already_uploaded = mysqli_num_rows($ass_record_result) > 0;
+                ?>
+                <tr align="center">
+                    <td>
+                        <?php echo $row['subject_code']; ?>
+                    </td>
+                    <td>
+                        <?php echo $row['subject_name']; ?>
+                    </td>
+                    <td>
+                        <?php echo $row['class']; ?>
+                    </td>
+                    <td>
+                        <?php if ($already_uploaded) { ?>
+                            Already Uploaded
+                        <?php } else { ?>
+                            <button type="button" class="btn btn-primary" onclick="fetchInputValue()" data-bs-toggle="modal"
+                                data-class="<?php echo $row['class']; ?>" data-subject="<?php echo $row['subject_name']; ?>"
+                                data-sem="<?php echo $row['semester']; ?>" data-code="<?php echo $subject_code; ?>"
+                                data-target="#assignmentModal">Upload Assignment</button>
+                        <?php } ?>
+                    </td>
+                    <td>
+                        <?php
+                        $assign_no = 2;
+                        $ass_record_query = "SELECT assign_file FROM `assignment_record` WHERE subject_code = '$subject_code' AND assign_no = $assign_no";
+                        $ass_record_result = mysqli_query($connection, $ass_record_query);
+                        $already_uploaded = mysqli_num_rows($ass_record_result) > 0;
+
+                        if ($already_uploaded) {
+                            while ($row = mysqli_fetch_assoc($ass_record_result)) {
+                                $assign_file = $row['assign_file'];
+                                ?>
+                                <a href="assignment_data/<?php echo $row['assign_file']; ?>" target="_blank"><button type="button"
+                                        class="btn btn-primary btn-sm">
+                                        Download
+                                    </button></a>
+                                <?php
+                            }
+                        } else {
+                            ?>
+                            <button type="button" class="btn btn-danger btn-sm" disabled>
+                                Not Uploaded yet!
+                            </button>
+                            <?php
+                        } ?>
+                    </td>
+
                 </tr>
             <?php } ?>
         </table>
@@ -137,8 +262,16 @@ if (isset($_POST['submit_assignment'])) {
                     <div class="modal-body">
                         <div class="form-group row mb-2">
                             <div class="col-sm-12 mb-4">
-                                <label for="Assignment" class="form-label">Upload Assignment <p><i>File size less than
-                                            10MB</i></p></label>
+                                <label for="Assignment" class="form-label">Enter Assignment Number</label>
+                                <input type="text" name="assignment_no" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-group row mb-2">
+                            <div class="col-sm-12 mb-4">
+                                <label for="Assignment" class="form-label">Upload Assignment <p style="margin:0;">
+                                        <i>File size less than
+                                            10MB</i>
+                                    </p></label>
                                 <input type="file" name="assignment_file" class="form-control" required>
                             </div>
                         </div>

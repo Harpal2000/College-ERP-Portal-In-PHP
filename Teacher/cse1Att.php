@@ -105,6 +105,24 @@ session_start();
                 <form method="POST" action="">
                     <div class="form-group row mb-2">
                         <div class="col-sm-4">
+                            <label for="lec_no" class="form-label">Total Lecture Delivered</label>
+                            <?php
+                            $query_lec = "SELECT MAX(lec_no) AS max_lec FROM attendance_record WHERE teach_name = '$t_name'";
+                            $result_lec = mysqli_query($connection, $query_lec);
+                            if (mysqli_num_rows($result_lec) >= 0) {
+                                while ($data2 = mysqli_fetch_assoc($result_lec)) {
+                                    $delivered_lec = $data2['max_lec'];
+                                    ?>
+                                    <input class="form-control" type="text" name="lec_no" id="lec_no"
+                                        value="<?php echo $delivered_lec; ?>" readonly>
+
+                                    <?php
+                                }
+                            }
+                            ?>
+
+                        </div>
+                        <div class="col-sm-4">
                             <label for="lec_no" class="form-label">Enter Lecture Number</label>
                             <input class="form-control" type="text" name="lec_no" id="lec_no">
                         </div>
@@ -147,7 +165,7 @@ session_start();
                                                         value="<?php echo $data['roll_no'] . ',' . $data['s_name'] . ',' . $t_name . ',' . $subject_code . ',' . $sub_id . ',' . $sub_name . ',' . "Absent"; ?>">Absent
                                                 </span>
                                                 <span id='checkBox2'>
-                                                    <input class="form-check-input" type="checkbox" name="status[]"
+                                                    <input class="form-check-input" type="checkbox" name="status[]" checked
                                                         value="<?php echo $data['roll_no'] . ',' . $data['s_name'] . ',' . $t_name . ',' . $subject_code . ',' . $sub_id . ',' . $sub_name . ',' . "Present"; ?>">Present
                                                 </span>
                                             </span>

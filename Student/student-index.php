@@ -63,6 +63,7 @@ if (!isset($_SESSION['LoginStudent'])) {
         <table cellpadding='8' class="table">
             <tr>
                 <?php
+                date_default_timezone_set('Asia/Kolkata');
                 $current_date = date("d-m-Y");
                 ?>
                 <th>Date:
@@ -79,7 +80,7 @@ if (!isset($_SESSION['LoginStudent'])) {
                 </th>
             </tr>
         </table>
-        <table cellpadding='6' class="table table-striped">
+        <table cellpadding='6' class="table table-striped table-hover">
             <th>S No</th>
             <th>Subject Name</th>
             <th>Teacher Name</th>
@@ -173,7 +174,7 @@ if (!isset($_SESSION['LoginStudent'])) {
                                 echo "0%";
                             } else {
                                 $attendance_percentage = ($total_present / $delivered_lec) * 100;
-                                echo $attendance_percentage . "%";
+                                echo number_format($attendance_percentage, 2) . "%";
                             }
                             ?>
                         </td>
