@@ -15,10 +15,12 @@ if (!isset($_SESSION['LoginStudent'])) {
 <html lang="en">
 
 <head>
-    <title>All Records</title>
+    <title>Pay Fee</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
 </head>
 
 <body>
@@ -39,7 +41,7 @@ if (!isset($_SESSION['LoginStudent'])) {
                 <?php
                 $query_course = "select * from student_record where roll_no = $stu_roll_no";
                 // echo "<script>alert('$query_course')</script>";
-
+                
                 $result_c = mysqli_query($connection, $query_course);
                 if (mysqli_num_rows($result_c) > 0) {
                     while ($data = mysqli_fetch_assoc($result_c)) {
@@ -77,6 +79,7 @@ if (!isset($_SESSION['LoginStudent'])) {
                             <th>Information</th>
                             <th>Current Semester</th>
                             <th>Current Semester Total fee</th>
+                            <th>Pay fee</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -98,7 +101,7 @@ if (!isset($_SESSION['LoginStudent'])) {
                                     </td>
                                     <td>
                                         <small><b>Course: </b><i>
-                                                <?php echo $course_desc . " " . "( " ."$course_name". " )"; ?>
+                                                <?php echo $course_desc . " " . "( " . "$course_name" . " )"; ?>
                                             </i></small><br>
                                         <small><b>Course Duration: </b><i>
                                                 <?php echo $course_dur; ?>
@@ -109,12 +112,15 @@ if (!isset($_SESSION['LoginStudent'])) {
                                         <?php echo $data['s_sem']; ?>
                                     </td>
                                     <td>
-                                        <?php echo $course_amount; ?>
+                                        <?php echo $course_amount / 2; ?>
+                                    </td>
+                                    <td>
+                                        <button id="rzp-button1">Pay Now</button>
                                     </td>
                                 </tr>
                                 <?php
                             }
-                        }else{
+                        } else {
                             echo "NO data found";
                         }
                         ?>
@@ -130,6 +136,36 @@ if (!isset($_SESSION['LoginStudent'])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
+
+    <script>
+        var options = {
+            "key": "rzp_test_tBM3XofEO81gUF",
+            "amount": "<?php echo ($course_amount / 2) * 100; ?>",
+            "name": "AGC, Amritsar",
+            "description": "<transaction_description>",
+            "image": "<merchant_logo>",
+            "handler": function (response) {
+                alert('Payment Successful!');
+            },
+            "prefill": {
+                "name": "<customer_name>",
+                "email": "<customer_email>",
+                "contact": "<customer_phone>"
+            },
+            "notes": {
+                "address": "<customer_address>"
+            },
+            "theme": {
+                "color": "#F37254"
+            }
+        };
+        var rzp1 = new Razorpay(options);
+        document.getElementById('rzp-button1').onclick = function (e) {
+            rzp1.open();
+            e.preventDefault();
+        }
+    </script>
+
 
 </body>
 

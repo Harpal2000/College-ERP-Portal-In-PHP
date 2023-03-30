@@ -9,7 +9,7 @@ require '../connection.php';
 <html lang="en">
 
 <head>
-    <title>All Records</title>
+    <title>Student Records</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
@@ -55,10 +55,11 @@ require '../connection.php';
 
                 <table id="myTable" class="display table-condensed table-bordered table-hover" style="width:100%">
                     <thead>
-                        <tr>
+                        <tr align="center">
                             <th>Id_No</th>
                             <th>Username</th>
                             <th>Password</th>
+                            <th>Address</th>
                             <th>Information</th>
                             <th>Contact No.</th>
                             <th>Action</th>
@@ -80,6 +81,9 @@ require '../connection.php';
                                     </td>
                                     <td>
                                         <?php echo $data['s_pass']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $data['s_address']; ?>
                                     </td>
                                     <td>
                                         <small><b>Email: </b><i>
@@ -147,9 +151,7 @@ require '../connection.php';
     <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
     <script>
         $(document).ready(function () {
-            $('#myTable').DataTable({
-                "pageLength": 5
-            });
+            $('#myTable').DataTable();
         });
 
     </script>
