@@ -20,17 +20,28 @@ if (!isset($_SESSION['LoginStudent'])) {
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+        #tableDiv {
+            border: 1px solid black;
+            padding: 2rem;
+            background-color: #f8f9fa;
+        }
+    </style>
 
 </head>
 
 <body>
     <br>
-    <a href="student-index.php"><button type="button" class="btn btn-secondary btn-sm">Main Dashboard</button></a>
+    <div class="container">
+        <a href="student-index.php"><button type="button" class="btn btn-secondary btn-sm">Main Dashboard</button></a>
+    </div>
     <div id="records">
         <center>
-            <br><br><br>
+            <br><br>
             <div id="tableDiv" style="width:80%">
-                <h1>Student's Fee Records</h1><br><br><br>
+                <h1 class="display-4">Verify Your Details and Pay Fee</h1>
+                <hr color="black">
+                <br><br>
                 <?php
                 $stu_roll_no = $_SESSION['LoginStudent'];
                 $query = "select * from student_record where roll_no = $stu_roll_no";
@@ -70,35 +81,32 @@ if (!isset($_SESSION['LoginStudent'])) {
 
                 ?>
 
-                <table id="myTable" class="display table-condensed table-bordered table-hover" style="width:100%">
-                    <thead>
-                        <tr align="center">
-                            <th>Student Name</th>
-                            <th>Father Name</th>
-                            <th>Roll No</th>
-                            <th>Information</th>
-                            <th>Current Semester</th>
-                            <th>Current Semester Total fee</th>
-                            <th>Pay fee</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                        <?php
-                        if (mysqli_num_rows($result) > 0) {
-                            while ($data = mysqli_fetch_assoc($result)) {
-                                ?>
-
-                                <tr align='center'>
+                <table id="myTable" class="display table-condensed table-bordered table-hover" style="width:100%"
+                    cellpadding="5">
+                    <?php
+                    if (mysqli_num_rows($result) > 0) {
+                        while ($data = mysqli_fetch_assoc($result)) {
+                            ?>
+                            <thead>
+                                <tr>
+                                    <th>Student Name</th>
                                     <td>
                                         <?php echo $data['s_name']; ?>
                                     </td>
+                                <tr>
+                                    <th>Father Name</th>
                                     <td>
                                         <?php echo $data['father_name']; ?>
                                     </td>
+                                </tr>
+                                <tr>
+                                    <th>Roll No</th>
                                     <td>
                                         <?php echo $data['roll_no']; ?>
                                     </td>
+                                </tr>
+                                <tr>
+                                    <th>Information</th>
                                     <td>
                                         <small><b>Course: </b><i>
                                                 <?php echo $course_desc . " " . "( " . "$course_name" . " )"; ?>
@@ -108,22 +116,33 @@ if (!isset($_SESSION['LoginStudent'])) {
                                             </i></small><br>
 
                                     </td>
+                                </tr>
+                                <tr>
+                                    <th>Current Semester</th>
                                     <td>
                                         <?php echo $data['s_sem']; ?>
                                     </td>
+                                </tr>
+                                <tr>
+                                    <th>Current Semester Total fee</th>
                                     <td>
                                         <?php echo $course_amount / 2; ?>
                                     </td>
+                                </tr>
+                                <tr>
+                                    <th>Pay fee</th>
                                     <td>
                                         <button id="rzp-button1">Pay Now</button>
                                     </td>
                                 </tr>
-                                <?php
-                            }
-                        } else {
-                            echo "NO data found";
+                            </thead>
+
+                            <?php
                         }
-                        ?>
+                    } else {
+                        echo "NO data found";
+                    }
+                    ?>
                     </tbody>
                 </table>
                 <div>

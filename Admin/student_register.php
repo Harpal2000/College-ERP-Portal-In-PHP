@@ -120,7 +120,7 @@ require '../connection.php';
                                 aria-label="default input example">
                         </div>
                         <div class="col-sm-3">
-                            <label for="img" class="form-label">Select Student Course</label>
+                            <label for="course_id" class="form-label">Select Student Course</label>
                             <select class="form-select" id="course_id" name="course_id">
                                 <option value=""></option>
                                 <?php
@@ -135,7 +135,7 @@ require '../connection.php';
                             </select>
                         </div>
                         <div class="col-sm-3">
-                            <label for="dob" class="form-label">Student Annual Course Fee</label>
+                            <label for="total_fee" class="form-label">Student Annual Course Fee</label>
                             <input type="text" class="form-control" id="total_fee" name="total_fee"
                                 value="<?php echo isset($total_fee) ? number_format($total_fee) : '' ?>" required
                                 readonly>
@@ -234,13 +234,13 @@ require '../connection.php';
 
         echo "<script>alert($gender);</script>";
 
-        if ($roll_no >= 2000046& $roll_no <= 2000091) {
+        if ($roll_no >= 2000046 & $roll_no <= 2000091) {
             $class_gp = 'G1';
-        } else if ($roll_no >= 2000092& $roll_no <= 2000137) {
+        } else if ($roll_no >= 2000092 & $roll_no <= 2000137) {
             $class_gp = 'G2';
-        } else if ($roll_no >= 2000138& $roll_no <= 2000185) {
+        } else if ($roll_no >= 2000138 & $roll_no <= 2000185) {
             $class_gp = 'G1';
-        } else if ($roll_no >= 2000186& $roll_no <= 2000235) {
+        } else if ($roll_no >= 2000186 & $roll_no <= 2000235) {
             $class_gp = 'G2';
         } else {
             $class_gp = 'Undefined';

@@ -27,6 +27,7 @@ if (!isset($_SESSION['LoginAdmin'])) {
                 Records</button></a>
         <a href="teacher_record.php"><button type="button" class="btn btn-secondary btn-sm">Teacher Records</button></a>
         <a href="courses.php"><button type="button" class="btn btn-secondary btn-sm">Add Courses</button></a>
+        <a href="Upload_fee.php"><button type="button" class="btn btn-secondary btn-sm">Assign Fee</button></a>
         <a href="subject_record.php"><button type="button" class="btn btn-secondary btn-sm">Subject Details</button></a>
         <a href="timetable_record.php"><button type="button" class="btn btn-secondary btn-sm">TimeTable</button></a>
 
