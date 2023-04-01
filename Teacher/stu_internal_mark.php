@@ -86,13 +86,13 @@ if (isset($_GET['t_name'])) {
                                             name="select2">
                                             <option selected disabled>--------- Select Your Subject ----------</option>
                                             <?php
-                                            $Query = "SELECT DISTINCT subject_name FROM timetable WHERE faculty_name = '$teacherName'";
+                                            $Query = "SELECT DISTINCT subject_name,class FROM timetable WHERE faculty_name = '$teacherName'";
                                             $QueryResult = mysqli_query($connection, $Query);
                                             if (mysqli_num_rows($QueryResult) > 0) {
                                                 while ($data = mysqli_fetch_assoc($QueryResult)) {
                                                     ?>
                                                     <option value="<?php echo $data['subject_name']; ?>">
-                                                        <?php echo $data['subject_name']; ?>
+                                                        <?php echo $data['subject_name'] . " (" . $data['class'] . " )"; ?>
                                                     </option>
                                                     <?php
                                                 }
