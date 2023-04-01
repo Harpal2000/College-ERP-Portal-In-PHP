@@ -32,16 +32,13 @@ if (!isset($_SESSION['LoginStudent'])) {
 
 <body>
     <br>
-    <div class="container">
-        <a href="student-index.php"><button type="button" class="btn btn-secondary btn-sm">Main Dashboard</button></a>
-    </div>
     <div id="records">
         <center>
-            <br><br>
+            <br>
             <div id="tableDiv" style="width:80%">
-                <h1 class="display-4">Verify Your Details and Pay Fee</h1>
+                <h1 class="display-4" style="font-size:2.5rem;">Verify Your Details and Pay Fee</h1>
                 <hr color="black">
-                <br><br>
+                <br>
                 <?php
                 $stu_roll_no = $_SESSION['LoginStudent'];
                 $query = "select * from student_record where roll_no = $stu_roll_no";
@@ -61,48 +58,66 @@ if (!isset($_SESSION['LoginStudent'])) {
                     }
                 }
                 ?>
+                <?php
+                $query_course = "select * from courses where id = $course_id";
+                // echo "<script>alert('$query_course')</script>";
+                
+                $result_c = mysqli_query($connection, $query_course);
+                if (mysqli_num_rows($result_c) > 0) {
+                    while ($data = mysqli_fetch_assoc($result_c)) {
+                        $course_name = $data['course'];
+                        $course_desc = $data['description'];
+                        $course_dur = $data['level'];
+                        // echo "<script>alert('$course_id')</script>";
+                    }
+                }
+                ?>
 
 
                 <?php
-                $query2 = "select * from courses where id = $course_id";
+                $stu_roll_no = $_SESSION['LoginStudent'];
+                $query2 = "select * from fee_payment_record where roll_no = '$stu_roll_no'";
 
                 $result2 = mysqli_query($connection, $query2);
 
-                if ($result2 && mysqli_num_rows($result2) > 0) {
-                    while ($data2 = mysqli_fetch_assoc($result2)) {
-                        $course_desc = $data2['description'];
-                        $course_name = $data2['course'];
-                        $course_dur = $data2['level'];
-                        $course_amount = $data2['total_amount'];
-                    }
-                } else {
-                    echo 'No Data Available';
-                }
 
                 ?>
 
                 <table id="myTable" class="display table-condensed table-bordered table-hover" style="width:100%"
                     cellpadding="5">
                     <?php
-                    if (mysqli_num_rows($result) > 0) {
-                        while ($data = mysqli_fetch_assoc($result)) {
+                    if ($result2 && mysqli_num_rows($result2) > 0) {
+                        while ($data2 = mysqli_fetch_assoc($result2)) {
+                            $fee = $data2['current_fee'];
                             ?>
                             <thead>
                                 <tr>
+                                    <th>Student Batch</th>
+                                    <td>
+                                        <?php echo $data2['stu_batch']; ?>
+                                    </td>
+                                <tr>
+                                <tr>
+                                    <th>Fee Due Date</th>
+                                    <td>
+                                        <?php echo $data2['fee_due_date']; ?>
+                                    </td>
+                                <tr>
+                                <tr>
                                     <th>Student Name</th>
                                     <td>
-                                        <?php echo $data['s_name']; ?>
+                                        <?php echo $data2['stu_name']; ?>
                                     </td>
                                 <tr>
                                     <th>Father Name</th>
                                     <td>
-                                        <?php echo $data['father_name']; ?>
+                                        <?php echo $data2['f_name']; ?>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>Roll No</th>
                                     <td>
-                                        <?php echo $data['roll_no']; ?>
+                                        <?php echo $data2['roll_no']; ?>
                                     </td>
                                 </tr>
                                 <tr>
@@ -114,25 +129,63 @@ if (!isset($_SESSION['LoginStudent'])) {
                                         <small><b>Course Duration: </b><i>
                                                 <?php echo $course_dur; ?>
                                             </i></small><br>
+                                        <small><b>E-Mail: </b><i>
+                                                <?php echo $data2['s_email']; ?>
+                                            </i></small><br>
+                                        <small><b>City: </b><i>
+                                                <?php echo $data2['s_city']; ?>
+                                            </i></small><br>
 
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>Current Semester</th>
                                     <td>
-                                        <?php echo $data['s_sem']; ?>
+                                        <?php echo $data2['s_sem']; ?>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>Current Semester Total fee</th>
                                     <td>
-                                        <?php echo $course_amount / 2; ?>
+                                        <?php echo 'Rs' . " " . $data2['current_fee']; ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Payment Status</th>
+                                    <td>
+                                        <?php
+                                        if ($data2['status'] == 'Pending') {
+                                            ?>
+                                            <button type="button" class="btn btn-danger btn-sm" disabled>
+                                                <?php echo $data2['status']; ?>
+                                            </button>
+                                            <?php
+                                        } else {
+                                            ?>
+                                            <button type="button" class="btn btn-primary btn-sm" disabled>
+                                                <?php echo $data2['status']; ?>
+                                            </button>
+                                            <?php
+                                        }
+                                        ?>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>Pay fee</th>
                                     <td>
-                                        <button id="rzp-button1">Pay Now</button>
+                                        <?php
+                                        if ($data2['status'] == 'Pending') {
+                                            ?>
+                                            <button id="rzp-button1" class="btn btn-primary btn-sm">Pay Now</button>
+                                            <?php
+                                        } else {
+                                            ?>
+                                            <button type="button" class="btn btn-primary btn-sm">
+                                                Print E-Receipt
+                                            </button>
+                                            <?php
+                                        }
+                                        ?>
                                     </td>
                                 </tr>
                             </thead>
@@ -159,10 +212,10 @@ if (!isset($_SESSION['LoginStudent'])) {
     <script>
         var options = {
             "key": "rzp_test_tBM3XofEO81gUF",
-            "amount": "<?php echo ($course_amount / 2) * 100; ?>",
+            "amount": "62430",
             "name": "AGC, Amritsar",
             "description": "<transaction_description>",
-            "image": "<merchant_logo>",
+            "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQK5gHeXeFSrSujf1v_BMv7wgb1zR2e4l2OAA&usqp=CAU",
             "handler": function (response) {
                 alert('Payment Successful!');
             },
