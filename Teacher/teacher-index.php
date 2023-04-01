@@ -49,19 +49,22 @@ if (!isset($_SESSION['LoginTeacher'])) {
                         <a href="upload_assignments.php?t_name=<?php echo $_SESSION['LoginTeacher']; ?>"><button
                                 type="button" class="btn" style="background-color:white;color:black;">Upload
                                 Assignments</button></a>
+                        <a href="stu_internal_mark.php?t_name=<?php echo $_SESSION['LoginTeacher']; ?>"><button
+                                type="button" class="btn" style="background-color:white;color:black;">Upload Internal
+                                Marks</button></a>
                     </span>
                 </div>
                 <div class="modal-body">
                     <table border='1' cellpadding='10' class="table table-condensed table-bordered table-hover mt-4">
                         <tr>
-                            <td>Sr No.</td>
-                            <td>Subject Code</td>
-                            <td>Subject Name</td>
-                            <td>Time Slot</td>
-                            <td>Day</td>
-                            <td>Room No.</td>
-                            <td>Subject Type</td>
-                            <td>Class</td>
+                            <th>Sr No.</th>
+                            <th>Subject Code</th>
+                            <th>Subject Name</th>
+                            <th>Time Slot</th>
+                            <th>Day</th>
+                            <th>Room No.</th>
+                            <th>Subject Type</th>
+                            <th>Class</th>
                         </tr>
 
                         <?php
@@ -71,9 +74,9 @@ if (!isset($_SESSION['LoginTeacher'])) {
                                 ?>
 
                                 <tr>
-                                    <td>
+                                    <th>
                                         <?php echo $sr_no; ?>
-                                    </td>
+                                    </th>
                                     <?php $sr_no = $sr_no + 1 ?>
                                     <td>
                                         <?php echo $data['subject_code']; ?>

@@ -192,7 +192,8 @@ if (!isset($_SESSION['LoginStudent'])) {
                                         if ($data2['status'] == 'Pending') {
                                             ?>
                                             <form method="POST">
-                                                <input type="text" name="RollNO" id=rollNO value="<?php echo $data2['roll_no'] ?>">
+                                                <input type="hidden" name="RollNO" id=rollNO
+                                                    value="<?php echo $data2['roll_no'] ?>">
                                                 <button id="pay-now-button" class="btn btn-primary btn-sm">Pay Now</button>
                                             </form>
                                             <?php

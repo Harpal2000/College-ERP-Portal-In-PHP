@@ -1,5 +1,6 @@
 <?php
 require '../connection.php';
+
 session_start();
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['s-att'])) {
     if (!empty($_POST['radio'])) {
