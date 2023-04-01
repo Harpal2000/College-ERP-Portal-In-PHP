@@ -18,6 +18,7 @@ if (!isset($_SESSION['LoginTeacher'])) {
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <title>Teacher Dashboard</title>
 </head>
 
@@ -26,6 +27,20 @@ if (!isset($_SESSION['LoginTeacher'])) {
     <h2>Welcome Back :)
         <?php echo $_SESSION['LoginTeacher']; ?>
     </h2>
+    <span class="mt-4">
+        <a href="../login.php"><button type="button" class="btn"
+                style="background-color:black;color:white;">LogOut</button></a>
+
+        <a href="student_att.php?t_name=<?php echo $_SESSION['LoginTeacher']; ?>"><button type="button" class="btn"
+                style="background-color:black;color:white;">Daily
+                Attendance</button></a>
+        <a href="upload_assignments.php?t_name=<?php echo $_SESSION['LoginTeacher']; ?>"><button type="button"
+                class="btn" style="background-color:black;color:white;">Upload
+                Assignments</button></a>
+        <a href="stu_internal_mark.php?t_name=<?php echo $_SESSION['LoginTeacher']; ?>"><button type="button"
+                class="btn" style="background-color:black;color:white;">Upload Internal
+                Marks</button></a>
+    </span>
 
     <center>
         <?php
@@ -38,21 +53,7 @@ if (!isset($_SESSION['LoginTeacher'])) {
         <div class="container-fluid mt-3">
             <div class="modal-content">
                 <div class="modal-header" style="background-color:#356155;color:white;">
-                    <h5 class="modal-title">Your Time Table</h5>
-                    <span>
-                        <a href="../login.php"><button type="button" class="btn"
-                                style="background-color:white;color:black;">LogOut</button></a>
-
-                        <a href="student_att.php?t_name=<?php echo $_SESSION['LoginTeacher']; ?>"><button type="button"
-                                class="btn" style="background-color:white;color:black;">Daily
-                                Attendance</button></a>
-                        <a href="upload_assignments.php?t_name=<?php echo $_SESSION['LoginTeacher']; ?>"><button
-                                type="button" class="btn" style="background-color:white;color:black;">Upload
-                                Assignments</button></a>
-                        <a href="stu_internal_mark.php?t_name=<?php echo $_SESSION['LoginTeacher']; ?>"><button
-                                type="button" class="btn" style="background-color:white;color:black;">Upload Internal
-                                Marks</button></a>
-                    </span>
+                    <h3 class="modal-title"><i class="bi bi-calendar-week"></i> Your Time Table</h3>
                 </div>
                 <div class="modal-body">
                     <table border='1' cellpadding='10' class="table table-condensed table-bordered table-hover mt-4">

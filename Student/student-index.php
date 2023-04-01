@@ -16,7 +16,7 @@ if (!isset($_SESSION['LoginStudent'])) {
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <title>Student Dashboard</title>
+    <title>Dashboard: Student</title>
     <style>
         table {
             width: 80% !important;
@@ -28,6 +28,7 @@ if (!isset($_SESSION['LoginStudent'])) {
     <a href="../login.php"><button type="button">Main Page</button></a>
     <a href="pay_fee.php"><button type="button">Pay Fee</button></a>
     <a href="stuProfile.php"><button type="button">Profile</button></a>
+    <a href="internal_marks.php"><button type="button">Internal Marks</button></a>
 
     <?php
     $stu_roll_no = $_SESSION['LoginStudent'];
