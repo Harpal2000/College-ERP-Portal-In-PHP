@@ -124,41 +124,41 @@ if (!isset($_SESSION['LoginStudent'])) {
                                 <?php
                                 $Query = "SELECT * FROM internal_marks WHERE stu_rollNo = $stu_roll_no AND subject_name = '$subject_name'";
                                 $result = mysqli_query($connection, $Query);
+                                $marks = array("Assignment-1" => "N/A", "Assignment-2" => "N/A", "MST-1" => "N/A", "MST-2" => "N/A");
+                                ?>
+                                <td>
+                                    <?php echo $marks['Assignment-1']; ?>
+                                </td>
+                                <td>
+                                    <?php echo $marks['Assignment-2']; ?>
+                                </td>
+                                <td>
+                                    <?php echo $marks['MST-1']; ?>
+                                </td>
+                                <td>
+                                    <?php echo $marks['MST-2']; ?>
+                                </td>
+                                <?php
                                 if (mysqli_num_rows($result) > 0) {
                                     while ($data = mysqli_fetch_assoc($result)) {
-                                        ?>
-                                        <td>
-                                            <?php
-                                            if ($data['assMstNo'] == 'Assignment1') {
-                                                echo $data['stu_Marks'];
-                                                ?>
-                                            </td>
-
-                                            <td>
-                                                <?php
-                                            } else if ($data['assMstNo'] == 'Assignment2') {
-                                                echo $data['stu_Marks'];
-                                                ?>
-                                                </td>
-
-                                                <td>
-                                                <?php
-                                            } else if ($data['assMstNo'] == 'MST-1') {
-                                                echo $data['stu_Marks'];
-                                                ?>
-                                                    </td>
-                                                    <td>
-                                                <?php
-                                            } else if ($data['assMstNo'] == 'MST-2') {
-                                                echo $data['stu_Marks'];
-                                                ?>
-
-                                                        </td>
-                                            <?php
-                                            } else {
-                                                echo "N/A";
-                                            }
+                                        $marks[$data['assMstNo']] = $data['stu_Marks'];
                                     }
+                                    ?>
+                                    <?php if ($marks['Assignment-1'] != "N/A"): ?>
+                                        <td>
+                                            <?php echo $marks['Assignment-1']; ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $marks['Assignment-2']; ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $marks['MST-1']; ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $marks['MST-2']; ?>
+                                        </td>
+                                    <?php endif; ?>
+                                    <?php
                                 }
                                 ?>
                             </tr>
