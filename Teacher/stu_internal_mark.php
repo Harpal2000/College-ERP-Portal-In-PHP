@@ -226,7 +226,7 @@ if (isset($_GET['t_name'])) {
             $name = $names[$i];
             $rollNo = $rollNos[$i];
             // echo "Mark for student with ID $id: $name: $mark:$rollNo <br>";
-            $sql = "INSERT INTO internal_marks (`stu_id`, `stu_name`, `stu_rollNo`, `stu_class`,`subject`,`ass_or_mst`,`assMstNo`,`stu_marks`) VALUES ('$id', '$name', '$rollNo', '$selected_class', '$selected_sub','$selected_assMst', '$selected_assMstNo','$mark')";
+            $sql = "INSERT INTO internal_marks (`stu_id`, `stu_name`, `stu_rollNo`, `stu_class`,`subject_name`,`ass_or_mst`,`assMstNo`,`stu_marks`) VALUES ('$id', '$name', '$rollNo', '$selected_class', '$selected_sub','$selected_assMst', '$selected_assMstNo','$mark')";
             mysqli_query($connection, $sql);
         }
         echo "<script>alert('Marks uploaded successfully');</script>";
