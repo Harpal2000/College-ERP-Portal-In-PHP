@@ -8,8 +8,10 @@ if (!isset($_SESSION['LoginStudent'])) {
     header('Location:login.php');
 }
 
-
 ?>
+
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -27,6 +29,17 @@ if (!isset($_SESSION['LoginStudent'])) {
             background-color: #f8f9fa;
         }
     </style>
+    <style>
+        @media print {
+            #tableDiv.no-border {
+                border: none;
+            }
+
+            .head {
+                visibility: hidden;
+            }
+        }
+    </style>
 
 </head>
 
@@ -36,8 +49,10 @@ if (!isset($_SESSION['LoginStudent'])) {
         <center>
             <br>
             <div id="tableDiv" style="width:80%">
-                <h1 class="display-4" style="font-size:2.5rem;">Verify Your Details and Pay Fee</h1>
-                <hr color="black">
+                <div class="head">
+                    <h1 class="display-4" style="font-size:2.5rem;">Verify Your Details and Pay Fee</h1>
+                    <hr color="black">
+                </div>
                 <br>
                 <?php
                 $stu_roll_no = $_SESSION['LoginStudent'];
@@ -162,7 +177,7 @@ if (!isset($_SESSION['LoginStudent'])) {
                                             <?php
                                         } else {
                                             ?>
-                                            <button type="button" class="btn btn-primary btn-sm" disabled>
+                                            <button type="button" class="btn btn-success btn-sm" disabled>
                                                 <?php echo $data2['status']; ?>
                                             </button>
                                             <?php
@@ -170,17 +185,20 @@ if (!isset($_SESSION['LoginStudent'])) {
                                         ?>
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr class="head">
                                     <th>Pay fee</th>
                                     <td>
                                         <?php
                                         if ($data2['status'] == 'Pending') {
                                             ?>
-                                            <button id="rzp-button1" class="btn btn-primary btn-sm">Pay Now</button>
+                                            <form method="POST">
+                                                <input type="text" name="RollNO" id=rollNO value="<?php echo $data2['roll_no'] ?>">
+                                                <button id="pay-now-button" class="btn btn-primary btn-sm">Pay Now</button>
+                                            </form>
                                             <?php
                                         } else {
                                             ?>
-                                            <button type="button" class="btn btn-primary btn-sm">
+                                            <button type="button" class="btn btn-primary btn-sm" onclick="printReceipt()">
                                                 Print E-Receipt
                                             </button>
                                             <?php
@@ -210,29 +228,48 @@ if (!isset($_SESSION['LoginStudent'])) {
         crossorigin="anonymous"></script>
 
     <script>
+        function printReceipt() {
+            $('#tableDiv').addClass('no-border');
+            window.print();
+        }
+    </script>
+
+    <script>
         var options = {
-            "key": "rzp_test_tBM3XofEO81gUF",
+            "key": "rzp_test_sf7GUFfzk2z4R7",
             "amount": "62430",
             "name": "AGC, Amritsar",
             "description": "<transaction_description>",
             "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQK5gHeXeFSrSujf1v_BMv7wgb1zR2e4l2OAA&usqp=CAU",
-            "handler": function (response) {
-                alert('Payment Successful!');
+            handler: function (response) {
+                var rollNO = $("#rollNO").val();
+                $.ajax({
+                    url: 'update_payment.php',
+                    type: 'POST',
+                    data: {
+                        payment_status: 'success',
+                        rollNO: rollNO
+                    },
+                    success: function (response) {
+                        alert("Payment Done");
+                    },
+                    error: function () {
+                        alert("Error updating database");
+                    }
+                });
             },
             "prefill": {
-                "name": "<customer_name>",
-                "email": "<customer_email>",
-                "contact": "<customer_phone>"
-            },
-            "notes": {
-                "address": "<customer_address>"
+                "name": "John Doe",
+                "email": "john@example.com",
+                "contact": "9999999999"
             },
             "theme": {
-                "color": "#F37254"
+                "color": "#528FF0"
             }
         };
+
         var rzp1 = new Razorpay(options);
-        document.getElementById('rzp-button1').onclick = function (e) {
+        document.getElementById('pay-now-button').onclick = function (e) {
             rzp1.open();
             e.preventDefault();
         }
