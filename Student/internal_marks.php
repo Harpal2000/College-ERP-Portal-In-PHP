@@ -126,6 +126,26 @@ if (!isset($_SESSION['LoginStudent'])) {
                                 $result = mysqli_query($connection, $Query);
                                 $marks = array("Assignment-1" => "N/A", "Assignment-2" => "N/A", "MST-1" => "N/A", "MST-2" => "N/A");
                                 ?>
+                                <?php
+                                if (mysqli_num_rows($result) > 0) {
+                                    while ($data = mysqli_fetch_assoc($result)) {
+                                        switch ($data['assMstNo']) {
+                                            case 'Assignment-1':
+                                                $marks['Assignment-1'] = $data['stu_Marks'];
+                                                break;
+                                            case 'Assignment-2':
+                                                $marks['Assignment-2'] = $data['stu_Marks'];
+                                                break;
+                                            case 'MST-1':
+                                                $marks['MST-1'] = $data['stu_Marks'];
+                                                break;
+                                            case 'MST-2':
+                                                $marks['MST-2'] = $data['stu_Marks'];
+                                                break;
+                                        }
+                                    }
+                                }
+                                ?>
                                 <td>
                                     <?php echo $marks['Assignment-1']; ?>
                                 </td>
@@ -139,31 +159,11 @@ if (!isset($_SESSION['LoginStudent'])) {
                                     <?php echo $marks['MST-2']; ?>
                                 </td>
                                 <?php
-                                if (mysqli_num_rows($result) > 0) {
-                                    while ($data = mysqli_fetch_assoc($result)) {
-                                        $marks[$data['assMstNo']] = $data['stu_Marks'];
-                                    }
-                                    ?>
-                                    <?php if ($marks['Assignment-1'] != "N/A"): ?>
-                                        <td>
-                                            <?php echo $marks['Assignment-1']; ?>
-                                        </td>
-                                        <td>
-                                            <?php echo $marks['Assignment-2']; ?>
-                                        </td>
-                                        <td>
-                                            <?php echo $marks['MST-1']; ?>
-                                        </td>
-                                        <td>
-                                            <?php echo $marks['MST-2']; ?>
-                                        </td>
-                                    <?php endif; ?>
-                                    <?php
-                                }
-                                ?>
-                            </tr>
-                            <?php
                         }
+                        ?>
+                        </tr>
+                        <?php
+
                     } else {
                         echo 'No Data Available';
                     }
