@@ -21,8 +21,6 @@ if (!isset($_SESSION['LoginStudent'])) {
         .container-fluid {
             max-width: 70vw;
             height: 20rem;
-            /* background-color: #6c757d2b; */
-            background-color: #dad7cd;
             margin-top: 5rem;
             padding: 0;
             border-radius: 0.5rem;
@@ -50,7 +48,11 @@ if (!isset($_SESSION['LoginStudent'])) {
         }
 
         #MarksTable {
-            font-size: 0.7rem;
+            font-size: 0.9rem;
+        }
+
+        .na-cell {
+            color: red;
         }
     </style>
 </head>
@@ -148,16 +150,24 @@ if (!isset($_SESSION['LoginStudent'])) {
                                     }
                                 }
                                 ?>
-                                <td>
+                                <td <?php if ($marks['Assignment-1'] === "N/A") {
+                                    echo 'class="na-cell"';
+                                } ?>>
                                     <?php echo $marks['Assignment-1']; ?>
                                 </td>
-                                <td>
+                                <td <?php if ($marks['Assignment-2'] === "N/A") {
+                                    echo 'class="na-cell"';
+                                } ?>>
                                     <?php echo $marks['Assignment-2']; ?>
                                 </td>
-                                <td>
+                                <td <?php if ($marks['MST-1'] === "N/A") {
+                                    echo 'class="na-cell"';
+                                } ?>>
                                     <?php echo $marks['MST-1']; ?>
                                 </td>
-                                <td>
+                                <td <?php if ($marks['MST-2'] === "N/A") {
+                                    echo 'class="na-cell"';
+                                } ?>>
                                     <?php echo $marks['MST-2']; ?>
                                 </td>
                                 <?php
