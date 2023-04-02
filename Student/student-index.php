@@ -118,8 +118,8 @@ if (!isset($_SESSION['LoginStudent'])) {
                         <th>S No</th>
                         <th>Subject Name</th>
                         <th>Time-Slot</th>
-                        <th>Attendance</th>
-                        <th>Total Attendance/Total Delivered</th>
+                        <th style="text-align:center;">Attendance</th>
+                        <th style="text-align:center;">Total Attendance/Total Delivered</th>
                         <th>Attendance %</th>
 
                     </tr>
@@ -216,7 +216,7 @@ if (!isset($_SESSION['LoginStudent'])) {
                                     }
                                     ?>
                                 </td>
-                                <td>
+                                <td style="text-align:center;">
                                     <?php
                                     if ($delivered_lec == 0) {
                                         echo "0%";

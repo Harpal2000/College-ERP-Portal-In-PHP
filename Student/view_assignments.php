@@ -75,29 +75,38 @@ $result2 = mysqli_query($connection, $query2);
                                 </td>
 
                                 <?php
-                                $Query = "select * from assignment_record where class = '$Student_class' and subject_name = '$subject_name'";
+                                $Query = "SELECT * FROM assignment_record WHERE class = '$Student_class' AND subject_name = '$subject_name'";
                                 $assign_result = mysqli_query($connection, $Query);
+
                                 if (mysqli_num_rows($assign_result) > 0) {
-                                    while ($data = mysqli_fetch_assoc($assign_result)) { ?>
-                                        <td>
-                                            <?php if ($data['assign_no'] == '1') { ?>
-                                                <a href="../Teacher/assignment_data/<?php echo $data['assign_file'] ?>">Assignment-1
-                                            </td>
-                                            <td>
-                                            <?php } else if ($data['assign_no'] == '2') { ?>
-                                                    <a href="../Teacher/assignment_data/<?php echo $data['assign_file'] ?>">Assignment-2
-                                                </td>
-                                            </tr>
-                                    <?php } else {
-                                                echo "No records found.";
-                                            } ?>
-                                <?php }
-                                } ?>
+                                    $found_assignments = array(0, 0);
+
+                                    while ($data = mysqli_fetch_assoc($assign_result)) {
+                                        if ($data['assign_no'] == 1) {
+                                            $found_assignments[0] = 1;
+                                            echo "<td><a href='../Teacher/assignment_data/{$data['assign_file']}'>Assignment-1</a></td>";
+                                        } elseif ($data['assign_no'] == 2) {
+                                            $found_assignments[1] = 1;
+                                            echo "<td><a href='../Teacher/assignment_data/{$data['assign_file']}'>Assignment-2</a></td>";
+                                        }
+                                    }
+
+                                    if (!$found_assignments[0]) {
+                                        echo "<td style='color:red;'>No record found!</td>";
+                                    }
+                                    if (!$found_assignments[1]) {
+                                        echo "<td style='color:red;'>No record found!</td>";
+                                    }
+                                } else {
+                                    echo "<td style='color:red;'>No record found!</td><td style='color:red;'>No record found!</td>";
+                                }
+                                ?>
 
 
 
 
-                        <?php }
+
+                            <?php }
                     } ?>
                 </tbody>
             </table>
