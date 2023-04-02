@@ -36,11 +36,14 @@ if (!isset($_SESSION['LoginTeacher'])) {
 </head>
 
 <?php
+if (isset($_GET['t_name'])) {
+    $t_name = $_GET['t_name'];
+}
 
 if (isset($_POST['submit_assignment'])) {
     if (isset($_FILES['assignment_file'])) {
         $assign_no = $_POST['assignment_no'];
-        echo "<script>alert($assign_no)</script>";
+        //echo "<script>alert($assign_no)</script>";
         $assignment_file = $_FILES['assignment_file'];
 
         $allowed_extensions = ['pdf', 'doc', 'docx'];
@@ -62,7 +65,7 @@ if (isset($_POST['submit_assignment'])) {
                 $semester = $_POST['semester'];
                 $assign_file = $file_name;
 
-                $query = "INSERT INTO assignment_record (subject_code, subject_name, class, sem, assign_file,assign_no) VALUES ('$subject_code', '$subject_name', '$class_name', '$semester', '$assign_file','$assign_no')";
+                $query = "INSERT INTO assignment_record (subject_code, subject_name,class,teacher_name,sem, assign_file,assign_no) VALUES ('$subject_code', '$subject_name', '$class_name','$t_name', '$semester', '$assign_file','$assign_no')";
                 if (mysqli_query($connection, $query)) {
                     echo "<script>alert('Assignment uploaded successfully.');</script>";
 
@@ -108,7 +111,7 @@ if (isset($_POST['submit_assignment'])) {
                 <?php
                 $assign_no = 1;
                 $subject_code = $row['subject_code'];
-                $ass_record_query = "SELECT * FROM `assignment_record` WHERE subject_code = '$subject_code' AND assign_no = $assign_no";
+                $ass_record_query = "SELECT * FROM `assignment_record` WHERE subject_code = '$subject_code' AND assign_no = $assign_no AND teacher_name = '$t_name'";
                 $ass_record_result = mysqli_query($connection, $ass_record_query);
                 $already_uploaded = mysqli_num_rows($ass_record_result) > 0;
                 ?>
@@ -135,7 +138,7 @@ if (isset($_POST['submit_assignment'])) {
                     <td>
                         <?php
                         $assign_no = 1;
-                        $ass_record_query = "SELECT assign_file FROM `assignment_record` WHERE subject_code = '$subject_code' AND assign_no = $assign_no";
+                        $ass_record_query = "SELECT assign_file FROM `assignment_record` WHERE subject_code = '$subject_code' AND assign_no = $assign_no AND teacher_name = '$t_name'";
                         $ass_record_result = mysqli_query($connection, $ass_record_query);
                         $already_uploaded = mysqli_num_rows($ass_record_result) > 0;
 

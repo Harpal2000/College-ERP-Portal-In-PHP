@@ -53,6 +53,7 @@ if (!isset($_SESSION['LoginStudent'])) {
     <a href="pay_fee.php"><button type="button">Pay Fee</button></a>
     <a href="stuProfile.php"><button type="button">Profile</button></a>
     <a href="internal_marks.php"><button type="button">Internal Marks</button></a>
+    <a href="view_assignments.php"><button type="button">View Assignments</button></a>
 
     <?php
     $stu_roll_no = $_SESSION['LoginStudent'];
