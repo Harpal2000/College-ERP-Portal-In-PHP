@@ -88,7 +88,9 @@ if (!isset($_SESSION['LoginStudent'])) {
         <div class="heading">
             <p>Internal Assessment Record</p>
             <center>
-                <p id="rollNo">Roll No.2000105</p>
+                <p id="rollNo">Roll No.
+                    <?php echo "$stu_roll_no"; ?>
+                </p>
             </center>
         </div>
         <div id="MarksTable">

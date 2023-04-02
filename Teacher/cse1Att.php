@@ -189,7 +189,7 @@ session_start();
                 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['s-att-data'])) {
                     $lec_no = $_POST['lec_no'];
                     $delivered_cont = $_POST['cont'];
-
+                    //echo "<script>alert('$lec_no', '$delivered_cont');</script>";
                     if (!empty($_POST['status'])) {
 
                         $alert_displayed = false;
