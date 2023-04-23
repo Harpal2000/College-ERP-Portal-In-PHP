@@ -9,6 +9,7 @@ if (!isset($_SESSION['LoginStudent'])) {
 }
 
 $rollNO = $_POST['rollNO'];
+// $rollNO = $_SESSION['LoginStudent'];
 
 if (isset($_POST['payment_status']) && $_POST['payment_status'] == 'success') {
     $query = "UPDATE fee_payment_record SET status = 'paid' WHERE roll_no = $rollNO";

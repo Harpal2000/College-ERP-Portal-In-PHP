@@ -14,178 +14,314 @@ if (!isset($_SESSION['LoginStudent'])) {
 
 <head>
     <title>Dashboard: Internal Marks</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/extra/nav.css">
+    <link rel="stylesheet" href="/bootstrap/bootstrap-5.3.0-alpha1-dist/css/bootstrap.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Golos+Text&display=swap" rel="stylesheet">
     <style>
-        .container-fluid {
-            max-width: 70vw;
-            height: 20rem;
-            margin-top: 5rem;
-            padding: 0;
-            border-radius: 0.5rem;
-        }
-
-        .heading {
-            /* background-color: #1e7e347d; */
-            background-color: #588157;
-            max-width: 70vw;
-            height: 8vh;
-            text-align: center;
-            color: white;
-        }
-
-        #rollNo {
-            background-color: #344e41;
-            max-width: 8.3rem;
-            height: 1.5rem;
-            text-align: center;
-            border-radius: 2rem;
-        }
-
-        p {
-            margin: 2px;
-        }
-
-        #MarksTable {
-            font-size: 0.9rem;
+        body {
+            background-color: rgb(226, 226, 226);
         }
 
         .na-cell {
             color: red;
         }
     </style>
+
 </head>
 
 <body>
-    <?php
-    $stu_roll_no = $_SESSION['LoginStudent'];
-    $query = "select * from student_record where roll_no = $stu_roll_no";
+    <!-- div margin for margin the navbar     -->
+    <div style="margin:10px; ">
+        <!-- sideNavbar  -->
+        <div class="side-navbar active-nav d-flex flex-column" id="sidebar" style="height:97%; border-radius: 10px;">
+            <div class="logo d-flex">
+                <div class="logoImg " style="display: flex;justify-content: center;">
+                    <img src="/images/Keystone logo - png.png" alt="" width="45px" height="45px"
+                        style="margin-top: auto; margin-bottom: auto;">
+                </div>
+                <div class="logo-text text-center pt-2 ps-2">
+                    <span class="uniName">Keystone University</span><br>
+                    <span class="profession align-top " style="text-align: center;">Pharmacy | Law | Engineering</span>
+                </div>
+            </div>
 
-    $result = mysqli_query($connection, $query);
-
-    if (mysqli_num_rows($result) > 0) {
-        while ($data = mysqli_fetch_assoc($result)) {
-            $Student_name = $data['s_name'];
-            $Student_class = $data['class'];
-            $Student_group = $data['s_group'];
-        }
-
-    } else {
-        echo 'No Data Available';
-    }
-
-    ?>
-
-
-    <?php
-    $query2 = "SELECT * FROM timetable WHERE lec_day = 'monday' AND class = '$Student_class' AND class_group = '$Student_group' OR (lec_sch = 'combine' AND lec_day = 'monday' AND class = '$Student_class')";
-
-
-    $result2 = mysqli_query($connection, $query2);
-
-    ?>
-
-    <div class="container-fluid">
-        <div class="heading">
-            <p>Internal Assessment Record</p>
-            <center>
-                <p id="rollNo">Roll No.
-                    <?php echo "$stu_roll_no"; ?>
-                </p>
-            </center>
-        </div>
-        <div id="MarksTable">
-            <table id="SelectClassTable" class="table table-striped mt-1">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Subject Name/code</th>
-                        <th></th>
-                        <th></th>
-                        <th>A1</th>
-                        <th>A2</th>
-                        <th>MST-1</th>
-                        <th>MST-2</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    $i = 1;
-                    if (mysqli_num_rows($result2) > 0) {
-                        while ($data2 = mysqli_fetch_assoc($result2)) {
-                            $subject_name = $data2['subject_name'];
-                            ?>
-                            <tr>
-                                <td>
-                                    <?php echo $i++ ?>
-                                </td>
-                                <td>
-                                    <?php echo $data2['subject_name'] . ' [ ' . $data2['subject_code'] . ']' ?>
-                                </td>
-                                <td></td>
-                                <td></td>
-                                <?php
-                                $Query = "SELECT * FROM internal_marks WHERE stu_rollNo = $stu_roll_no AND subject_name = '$subject_name'";
-                                $result = mysqli_query($connection, $Query);
-                                $marks = array("Assignment-1" => "N/A", "Assignment-2" => "N/A", "MST-1" => "N/A", "MST-2" => "N/A");
-                                ?>
-                                <?php
-                                if (mysqli_num_rows($result) > 0) {
-                                    while ($data = mysqli_fetch_assoc($result)) {
-                                        switch ($data['assMstNo']) {
-                                            case 'Assignment-1':
-                                                $marks['Assignment-1'] = $data['stu_Marks'];
-                                                break;
-                                            case 'Assignment-2':
-                                                $marks['Assignment-2'] = $data['stu_Marks'];
-                                                break;
-                                            case 'MST-1':
-                                                $marks['MST-1'] = $data['stu_Marks'];
-                                                break;
-                                            case 'MST-2':
-                                                $marks['MST-2'] = $data['stu_Marks'];
-                                                break;
-                                        }
-                                    }
-                                }
-                                ?>
-                                <td <?php if ($marks['Assignment-1'] === "N/A") {
-                                    echo 'class="na-cell"';
-                                } ?>>
-                                    <?php echo $marks['Assignment-1']; ?>
-                                </td>
-                                <td <?php if ($marks['Assignment-2'] === "N/A") {
-                                    echo 'class="na-cell"';
-                                } ?>>
-                                    <?php echo $marks['Assignment-2']; ?>
-                                </td>
-                                <td <?php if ($marks['MST-1'] === "N/A") {
-                                    echo 'class="na-cell"';
-                                } ?>>
-                                    <?php echo $marks['MST-1']; ?>
-                                </td>
-                                <td <?php if ($marks['MST-2'] === "N/A") {
-                                    echo 'class="na-cell"';
-                                } ?>>
-                                    <?php echo $marks['MST-2']; ?>
-                                </td>
-                                <?php
-                        }
-                        ?>
-                        </tr>
+            <div class="studName mx-2 d-flex flex-lg-row flex-sm-column ">
+                <span class="stud-image"><a href="stuProfile.php" style="text-decoration:none;color:white;">
                         <?php
+                        $stu_roll_no = $_SESSION['LoginStudent'];
+                        $query = "select * from student_record where roll_no = $stu_roll_no";
+
+                        $result = mysqli_query($connection, $query);
+                        ?>
+                        <?php
+                        if (mysqli_num_rows($result) > 0) {
+                            while ($data = mysqli_fetch_assoc($result)) {
+                                ?>
+                                <?php
+                                $image = $data['s_image'];
+                                $image_src = "../Admin/student_image/" . $image;
+                                ?>
+                                <img src="<?php echo $image_src; ?>" alt="" width="35px">
+
+
+                        </span>
+                        <div class="stud-text text " style="font-weight: 100; text-align: center; margin-left: 10px;">
+                            <span>
+                                <?php echo $data['s_name']; ?>
+                            </span> </a>
+                        </div>
+
+                        <?php
+                            }
+                        } else {
+                            echo 'No Data Available';
+                        }
+
+                        ?>
+            </div>
+
+
+            <ul class="menu-links " style="padding-left: 0;">
+                <li class="nav-link">
+                    <a href="student-index.php" class="mx-auto" style="">
+                        <i class='bx bx-home-alt icon'></i>
+                        <span class="text nav-text ">Dashboard </span>
+
+                    </a>
+                </li>
+
+                <li class="nav-link">
+                    <a href="view_assignments.php">
+                        <i class='bx bx-bar-chart-alt-2 icon'></i>
+                        <span class="text nav-text">Assignments</span>
+                    </a>
+                </li>
+
+                <li class="nav-link">
+                    <a href="internal_marks.php">
+                        <i class='bx bx-pie-chart-alt icon'></i>
+                        <span class="text nav-text">Internal Marks</span>
+                    </a>
+                </li>
+
+                <li class="nav-link">
+                    <a href="stuProfile.php">
+                        <i class='bx bx-user icon'></i>
+                        <span class="text nav-text">Profile</span>
+                    </a>
+                </li>
+
+                <li class="nav-link">
+                    <a href="pay_fee.php">
+                        <i class='bx bx-wallet icon'></i>
+                        <span class="text nav-text">Pay Fee</span>
+                    </a>
+                </li>
+
+                <!-- <li class="nav-link">
+                    <a href="#">
+                        <i class='bx bx-wallet icon'></i>
+                        <span class="text nav-text">Fee Receipt</span>
+                    </a>
+                </li> -->
+                <li class="logout text-center nav-link"
+                    style="position: absolute;bottom: 10px; right: 0; left: 0;text-align: center;">
+                    <a href="#">
+                        <i class='bx bx-log-out icon'></i>
+                        <span class="text nav-text">Logout</span>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+        <!-- toogle icon  -->
+        <div class="ps-lg-5 ps-md-4  pt-0 my-container active-cont" style="display: flex;">
+            <a class="btn border-0 mt-2" id="menu-btn" style="height: 1%;">
+                <i class="bx bx-menu"></i>
+            </a>
+
+
+            <!-- main Content  -->
+
+            <div class="container ms-3  align-items-center" style="width: 90%;">
+                <div class="row d-flex mb-5" style="margin-top:5px">
+                    <div class="col ms-0" style="padding-left: 0;">
+                        <div class="text" style="display:flex; flex-direction: column;color: black;font-size:26px">
+                            <b>INTERNAL MARKS</b><span
+                                style="color: #570706 ;font-size:xx-small;margin-top: -10px;"><b>CHECK YOUR ACADEMIC
+                                    SCORES</b></span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row attendance-table ">
+
+                    <?php
+                    $stu_roll_no = $_SESSION['LoginStudent'];
+                    $query = "select * from student_record where roll_no = $stu_roll_no";
+
+                    $result = mysqli_query($connection, $query);
+
+                    if (mysqli_num_rows($result) > 0) {
+                        while ($data = mysqli_fetch_assoc($result)) {
+                            $Student_name = $data['s_name'];
+                            $Student_class = $data['class'];
+                            $Student_group = $data['s_group'];
+                        }
 
                     } else {
                         echo 'No Data Available';
                     }
+
                     ?>
-                </tbody>
-            </table>
+
+
+                    <?php
+                    $query2 = "SELECT * FROM timetable WHERE lec_day = 'monday' AND class = '$Student_class' AND class_group = '$Student_group' OR (lec_sch = 'combine' AND lec_day = 'monday' AND class = '$Student_class')";
+
+
+                    $result2 = mysqli_query($connection, $query2);
+
+                    ?>
+
+                    <div
+                        class="attendance-head headings text-light ps-2 rounded-top p-2 d-flex justify-content-between">
+
+                        <div>Rollno:
+                            <?php echo $stu_roll_no; ?>
+                        </div>
+                        <div class="pe-2">Section:
+                            <?php echo $Student_class . "( " . $Student_group . " )"; ?>
+                        </div>
+
+                    </div>
+
+                    <table class="tabl table table-sm table-hover bg-light rounded-bottom text-center">
+                        <thead>
+                            <tr>
+                                <th scope="col">S. No.</th>
+                                <th scope="col" style="text-align:start;">Subject Name</th>
+                                <th scope="col">A1</th>
+                                <th scope="col">A2</th>
+                                <th scope="col">MST1</th>
+                                <th scope="col">MST2</th>
+                            </tr>
+                        </thead>
+                        <tbody class="px-5">
+                            <?php
+                            $i = 1;
+                            if (mysqli_num_rows($result2) > 0) {
+                                while ($data2 = mysqli_fetch_assoc($result2)) {
+                                    $subject_name = $data2['subject_name'];
+                                    ?>
+                                    <tr>
+                                        <th scope="row">
+                                            <?php echo $i++ ?>
+                                        </th>
+                                        <td style="text-align:start;">
+                                            <?php echo $data2['subject_name'] . ' [ ' . $data2['subject_code'] . ']' . '<br>' ?>
+                                            <p class="text-secondary" style="text-align:start;">
+                                                <?php echo $data2['faculty_name'] ?>
+                                            </p>
+                                        </td>
+                                        <?php
+                                        $Query = "SELECT * FROM internal_marks WHERE stu_rollNo = $stu_roll_no AND subject_name = '$subject_name'";
+                                        $result = mysqli_query($connection, $Query);
+                                        $marks = array("Assignment-1" => "N/A", "Assignment-2" => "N/A", "MST-1" => "N/A", "MST-2" => "N/A");
+                                        ?>
+                                        <?php
+                                        if (mysqli_num_rows($result) > 0) {
+                                            while ($data = mysqli_fetch_assoc($result)) {
+                                                switch ($data['assMstNo']) {
+                                                    case 'Assignment-1':
+                                                        $marks['Assignment-1'] = $data['stu_Marks'];
+                                                        break;
+                                                    case 'Assignment-2':
+                                                        $marks['Assignment-2'] = $data['stu_Marks'];
+                                                        break;
+                                                    case 'MST-1':
+                                                        $marks['MST-1'] = $data['stu_Marks'];
+                                                        break;
+                                                    case 'MST-2':
+                                                        $marks['MST-2'] = $data['stu_Marks'];
+                                                        break;
+                                                }
+                                            }
+                                        }
+                                        ?>
+                                        <td <?php if ($marks['Assignment-1'] === "N/A") {
+                                            echo 'class="na-cell"';
+                                        } ?>> <?php echo $marks['Assignment-1']; ?>
+
+                                        </td>
+                                        <td <?php if ($marks['Assignment-2'] === "N/A") {
+                                            echo 'class="na-cell"';
+                                        } ?>> <?php echo $marks['Assignment-2']; ?></td>
+                                        <td <?php if ($marks['MST-1'] === "N/A") {
+                                            echo 'class="na-cell"';
+                                        } ?>>
+                                            <?php echo $marks['MST-1']; ?>
+                                        </td>
+                                        <td <?php if ($marks['MST-2'] === "N/A") {
+                                            echo 'class="na-cell"';
+                                        } ?>>
+                                            <?php echo $marks['MST-2']; ?>
+                                        </td>
+                                        <?php
+                                }
+                                ?>
+                                </tr>
+                                <?php
+
+                            } else {
+                                echo 'No Data Available';
+                            }
+                            ?>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                </div>
+
+
+
+            </div>
+
         </div>
     </div>
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- pala da code  -->
+
+    <script>
+        var menu_btn = document.querySelector("#menu-btn");
+        var sidebar = document.querySelector("#sidebar");
+        var container = document.querySelector(".my-container");
+        menu_btn.addEventListener("click", () => {
+            sidebar.classList.toggle("active-nav");
+            container.classList.toggle("active-cont");
+        });
+    </script>
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"

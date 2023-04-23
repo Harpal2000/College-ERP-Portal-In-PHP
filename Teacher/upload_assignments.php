@@ -17,9 +17,16 @@ if (!isset($_SESSION['LoginTeacher'])) {
 <head>
     <title>Upload Assignments</title>
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="/bootstrap/bootstrap-5.3.0-alpha1-dist/css/bootstrap.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Golos+Text&display=swap" rel="stylesheet">
     <style>
+        body {
+            background-color: rgb(226, 226, 226);
+        }
+
         table {
             width: 70% !important;
         }
@@ -86,7 +93,7 @@ if (isset($_POST['submit_assignment'])) {
 
 
 <body>
-    <center class="mt-5">
+    <center class="mt-2" style="background-color:white; width:98vw; height:100vh">
         <?php
 
         if (isset($_GET['t_name'])) {
@@ -96,153 +103,164 @@ if (isset($_POST['submit_assignment'])) {
         '$t_name' and subject_type = 'lecture'";
         $result = mysqli_query($connection, $query);
         ?>
-        <h1 class="display-3">Upload Your Assignments Here</h1>
-        <hr color="black" width="70%">
-        <table border="1" class="table table-condensed table-bordered table-hover mt-4">
-            <caption align="top">Assignment-1</caption>
-            <tr align="center">
-                <th>subject_code</th>
-                <th>Subject_name</th>
-                <th>class</th>
-                <th>Upload Assignment</th>
-                <th>View Assignment</th>
-            </tr>
-            <?php while ($row = mysqli_fetch_assoc($result)) { ?>
-                <?php
-                $assign_no = 1;
-                $subject_code = $row['subject_code'];
-                $ass_record_query = "SELECT * FROM `assignment_record` WHERE subject_code = '$subject_code' AND assign_no = $assign_no AND teacher_name = '$t_name'";
-                $ass_record_result = mysqli_query($connection, $ass_record_query);
-                $already_uploaded = mysqli_num_rows($ass_record_result) > 0;
-                ?>
-                <tr align="center">
-                    <td>
-                        <?php echo $row['subject_code']; ?>
-                    </td>
-                    <td>
-                        <?php echo $row['subject_name']; ?>
-                    </td>
-                    <td>
-                        <?php echo $row['class']; ?>
-                    </td>
-                    <td>
-                        <?php if ($already_uploaded) { ?>
-                            Already Uploaded
-                        <?php } else { ?>
-                            <button type="button" class="btn btn-primary" onclick="fetchInputValue()" data-bs-toggle="modal"
-                                data-class="<?php echo $row['class']; ?>" data-subject="<?php echo $row['subject_name']; ?>"
-                                data-sem="<?php echo $row['semester']; ?>" data-code="<?php echo $subject_code; ?>"
-                                data-target="#assignmentModal">Upload Assignment</button>
-                        <?php } ?>
-                    </td>
-                    <td>
-                        <?php
-                        $assign_no = 1;
-                        $ass_record_query = "SELECT assign_file FROM `assignment_record` WHERE subject_code = '$subject_code' AND assign_no = $assign_no AND teacher_name = '$t_name'";
-                        $ass_record_result = mysqli_query($connection, $ass_record_query);
-                        $already_uploaded = mysqli_num_rows($ass_record_result) > 0;
-
-                        if ($already_uploaded) {
-                            while ($row = mysqli_fetch_assoc($ass_record_result)) {
-                                $assign_file = $row['assign_file'];
-                                ?>
-                                <a href="assignment_data/<?php echo $row['assign_file']; ?>" target="_blank"><button type="button"
-                                        class="btn btn-primary btn-sm">
-                                        Download
-                                    </button></a>
-                                <?php
-                            }
-                        } else {
-                            ?>
-                            <button type="button" class="btn btn-danger btn-sm" disabled>
-                                Not Uploaded yet!
-                            </button>
-                            <?php
-                        } ?>
-                    </td>
-
+        <div class="header-sec d-flex" style="color:white; background-color:#337362;padding:1%; justify-content-center">
+            <div>
+                <a href="../teacher/teacher-index.php"><button type="button" class="btn"
+                        style="background-color:white;color:black;"> <i class='bx bx-home-alt icon'></i>
+                        Dashboard</button></a>
+            </div>
+            <div style="padding-left:20%">
+                <h2 class="">Upload Your Assignments Here</h2>
+            </div>
+        </div>
+        <!-- <hr color="black" width="70%"> -->
+        <div style="border:1px solid black; width:85%;margin-top:1%">
+            <table border="1" class="table table-condensed table-bordered table-hover mt-4">
+                <caption align="top">Assignment-1</caption>
+                <tr align="center" style="color:white; background-color:#337362">
+                    <th>subject_code</th>
+                    <th>Subject_name</th>
+                    <th>class</th>
+                    <th>Upload Assignment</th>
+                    <th>View Assignment</th>
                 </tr>
-            <?php } ?>
-        </table>
+                <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+                    <?php
+                    $assign_no = 1;
+                    $subject_code = $row['subject_code'];
+                    $ass_record_query = "SELECT * FROM `assignment_record` WHERE subject_code = '$subject_code' AND assign_no = $assign_no AND teacher_name = '$t_name'";
+                    $ass_record_result = mysqli_query($connection, $ass_record_query);
+                    $already_uploaded = mysqli_num_rows($ass_record_result) > 0;
+                    ?>
+                    <tr align="center">
+                        <td>
+                            <?php echo $row['subject_code']; ?>
+                        </td>
+                        <td>
+                            <?php echo $row['subject_name']; ?>
+                        </td>
+                        <td>
+                            <?php echo $row['class']; ?>
+                        </td>
+                        <td>
+                            <?php if ($already_uploaded) { ?>
+                                Already Uploaded
+                            <?php } else { ?>
+                                <button type="button" class="btn btn-primary" onclick="fetchInputValue()" data-bs-toggle="modal"
+                                    data-class="<?php echo $row['class']; ?>" data-subject="<?php echo $row['subject_name']; ?>"
+                                    data-sem="<?php echo $row['semester']; ?>" data-code="<?php echo $subject_code; ?>"
+                                    data-target="#assignmentModal">Upload Assignment</button>
+                            <?php } ?>
+                        </td>
+                        <td>
+                            <?php
+                            $assign_no = 1;
+                            $ass_record_query = "SELECT assign_file FROM `assignment_record` WHERE subject_code = '$subject_code' AND assign_no = $assign_no AND teacher_name = '$t_name'";
+                            $ass_record_result = mysqli_query($connection, $ass_record_query);
+                            $already_uploaded = mysqli_num_rows($ass_record_result) > 0;
+
+                            if ($already_uploaded) {
+                                while ($row = mysqli_fetch_assoc($ass_record_result)) {
+                                    $assign_file = $row['assign_file'];
+                                    ?>
+                                    <a href="assignment_data/<?php echo $row['assign_file']; ?>" target="_blank"><button
+                                            type="button" class="btn btn-primary btn-sm">
+                                            Download
+                                        </button></a>
+                                    <?php
+                                }
+                            } else {
+                                ?>
+                                <button type="button" class="btn btn-danger btn-sm" disabled>
+                                    Not Uploaded yet!
+                                </button>
+                                <?php
+                            } ?>
+                        </td>
+
+                    </tr>
+                <?php } ?>
+            </table>
 
 
 
-        <!-- Assignment-2 -->
-        <?php
+            <!-- Assignment-2 -->
+            <?php
 
-        if (isset($_GET['t_name'])) {
-            $t_name = $_GET['t_name'];
-        }
-        $query = "SELECT DISTINCT subject_name,subject_code,class,semester FROM `timetable` WHERE faculty_name =
+            if (isset($_GET['t_name'])) {
+                $t_name = $_GET['t_name'];
+            }
+            $query = "SELECT DISTINCT subject_name,subject_code,class,semester FROM `timetable` WHERE faculty_name =
         '$t_name' and subject_type = 'lecture'";
-        $result = mysqli_query($connection, $query);
-        ?>
-        <table border="1" class="table table-condensed table-bordered table-hover mt-4">
-            <caption align="top">Assignment-2</caption>
-            <tr align="center">
-                <th>subject_code</th>
-                <th>Subject_name</th>
-                <th>class</th>
-                <th>Upload Assignment</th>
-                <th>View Assignment</th>
-            </tr>
-            <?php while ($row = mysqli_fetch_assoc($result)) { ?>
-                <?php
-                $assign_no = 2;
-                $subject_code = $row['subject_code'];
-                $ass_record_query = "SELECT * FROM `assignment_record` WHERE subject_code = '$subject_code' AND assign_no = $assign_no";
-                $ass_record_result = mysqli_query($connection, $ass_record_query);
-                $already_uploaded = mysqli_num_rows($ass_record_result) > 0;
-                ?>
-                <tr align="center">
-                    <td>
-                        <?php echo $row['subject_code']; ?>
-                    </td>
-                    <td>
-                        <?php echo $row['subject_name']; ?>
-                    </td>
-                    <td>
-                        <?php echo $row['class']; ?>
-                    </td>
-                    <td>
-                        <?php if ($already_uploaded) { ?>
-                            Already Uploaded
-                        <?php } else { ?>
-                            <button type="button" class="btn btn-primary" onclick="fetchInputValue()" data-bs-toggle="modal"
-                                data-class="<?php echo $row['class']; ?>" data-subject="<?php echo $row['subject_name']; ?>"
-                                data-sem="<?php echo $row['semester']; ?>" data-code="<?php echo $subject_code; ?>"
-                                data-target="#assignmentModal">Upload Assignment</button>
-                        <?php } ?>
-                    </td>
-                    <td>
-                        <?php
-                        $assign_no = 2;
-                        $ass_record_query = "SELECT assign_file FROM `assignment_record` WHERE subject_code = '$subject_code' AND assign_no = $assign_no";
-                        $ass_record_result = mysqli_query($connection, $ass_record_query);
-                        $already_uploaded = mysqli_num_rows($ass_record_result) > 0;
-
-                        if ($already_uploaded) {
-                            while ($row = mysqli_fetch_assoc($ass_record_result)) {
-                                $assign_file = $row['assign_file'];
-                                ?>
-                                <a href="assignment_data/<?php echo $row['assign_file']; ?>" target="_blank"><button type="button"
-                                        class="btn btn-primary btn-sm">
-                                        Download
-                                    </button></a>
-                                <?php
-                            }
-                        } else {
-                            ?>
-                            <button type="button" class="btn btn-danger btn-sm" disabled>
-                                Not Uploaded yet!
-                            </button>
-                            <?php
-                        } ?>
-                    </td>
-
+            $result = mysqli_query($connection, $query);
+            ?>
+            <table border="1" class="table table-condensed table-bordered table-hover mt-4">
+                <caption align="top">Assignment-2</caption>
+                <tr align="center" style="color:white; background-color:#337362">
+                    <th>subject_code</th>
+                    <th>Subject_name</th>
+                    <th>class</th>
+                    <th>Upload Assignment</th>
+                    <th>View Assignment</th>
                 </tr>
-            <?php } ?>
-        </table>
+                <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+                    <?php
+                    $assign_no = 2;
+                    $subject_code = $row['subject_code'];
+                    $ass_record_query = "SELECT * FROM `assignment_record` WHERE subject_code = '$subject_code' AND assign_no = $assign_no";
+                    $ass_record_result = mysqli_query($connection, $ass_record_query);
+                    $already_uploaded = mysqli_num_rows($ass_record_result) > 0;
+                    ?>
+                    <tr align="center">
+                        <td>
+                            <?php echo $row['subject_code']; ?>
+                        </td>
+                        <td>
+                            <?php echo $row['subject_name']; ?>
+                        </td>
+                        <td>
+                            <?php echo $row['class']; ?>
+                        </td>
+                        <td>
+                            <?php if ($already_uploaded) { ?>
+                                Already Uploaded
+                            <?php } else { ?>
+                                <button type="button" class="btn btn-primary" onclick="fetchInputValue()" data-bs-toggle="modal"
+                                    data-class="<?php echo $row['class']; ?>" data-subject="<?php echo $row['subject_name']; ?>"
+                                    data-sem="<?php echo $row['semester']; ?>" data-code="<?php echo $subject_code; ?>"
+                                    data-target="#assignmentModal">Upload Assignment</button>
+                            <?php } ?>
+                        </td>
+                        <td>
+                            <?php
+                            $assign_no = 2;
+                            $ass_record_query = "SELECT assign_file FROM `assignment_record` WHERE subject_code = '$subject_code' AND assign_no = $assign_no";
+                            $ass_record_result = mysqli_query($connection, $ass_record_query);
+                            $already_uploaded = mysqli_num_rows($ass_record_result) > 0;
+
+                            if ($already_uploaded) {
+                                while ($row = mysqli_fetch_assoc($ass_record_result)) {
+                                    $assign_file = $row['assign_file'];
+                                    ?>
+                                    <a href="assignment_data/<?php echo $row['assign_file']; ?>" target="_blank"><button
+                                            type="button" class="btn btn-primary btn-sm">
+                                            Download
+                                        </button></a>
+                                    <?php
+                                }
+                            } else {
+                                ?>
+                                <button type="button" class="btn btn-danger btn-sm" disabled>
+                                    Not Uploaded yet!
+                                </button>
+                                <?php
+                            } ?>
+                        </td>
+
+                    </tr>
+                <?php } ?>
+            </table>
+        </div>
     </center>
 
 

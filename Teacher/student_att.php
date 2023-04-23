@@ -24,6 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['s-att'])) {
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+
     <title>Teacher Dashboard</title>
     <style>
         .form-check-input:checked {
@@ -50,8 +52,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['s-att'])) {
             <div class="modal-header" style="background-color:#356155;color:white;">
                 <h5 class="modal-title">Your Today Lecture's</h5>
                 <span>
-                    <a href="../teacher/teacher-index.php"><button type="button" class="btn"
-                            style="background-color:white;color:black;">My Dashboard</button></a>
+                <a href="../teacher/teacher-index.php"><button type="button" class="btn"
+                        style="background-color:white;color:black;"> <i class='bx bx-home-alt icon'></i>
+                        Dashboard</button></a>
                 </span>
             </div>
             <div class="modal-body">

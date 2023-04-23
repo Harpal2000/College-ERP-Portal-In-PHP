@@ -1,0 +1,359 @@
+ * {
+            font-family: 'Golos Text', sans-serif;
+        }
+
+        body {
+            background-color: rgb(226, 226, 226);
+        }
+.side-navbar {
+    width: 220px;
+    width: 260px;
+    width: 18%;
+    height: 100%;
+    position: fixed;
+    margin-left: -300px;
+        background-color:white;
+    transition: 0.5s;
+    color:#337362;
+   
+}
+
+.nav-link:active,
+.nav-link:focus,
+.nav-link:hover {
+    background-color: #ffffff26;
+}
+
+.my-container {
+    transition: 0.4s;
+}
+
+.active-nav {
+    margin-left: 0;
+}
+
+/* for main section */
+.active-cont {
+    margin-left: 180px;
+    margin-left: 15%;
+}
+
+#menu-btn {
+    background-color: #337362;
+    color: #fff;
+    /* size: 7px; */
+    /* margin-left: 3%; */
+
+}
+
+
+.uniName {
+    font-size: x-small;
+    font-weight: 800;
+    border-bottom: 1px solid grey;
+    
+}
+
+.profession {
+    font-size: xx-small;
+    padding-top: -20px;
+    text-align: center;
+
+}
+
+.studName {
+    display: flex;
+    align-items: center;
+    /* justify-content: space-between; */
+    text-align: center;
+    color: white;
+    background-color: #337362;
+    padding: 5px;
+    margin-top: 30px;
+
+}
+
+.menu-links a {
+    text-decoration: none;
+    color: #969292;
+
+}
+
+/* .menu-links li:hover{
+    width: 100%;
+    background-color: #3373622c;
+    transition: 0.5s all ;
+}
+.menu-links li:hover{
+    color: #100901;
+    transition: 0.3s all-ease;
+} */
+
+.menu-links li a {
+    list-style: none;
+    height: 100%;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: var(--tran-03);
+    transition: 0.3s all;
+
+}
+
+.menu-links {
+    margin-top: 30px;
+}
+
+.menu-links li a {
+    padding: 9px;
+    text-align: center;
+}
+
+.menu-links .logout a {
+
+    padding-left: 10%;
+    color: #570706;
+}
+.menu-links .logout a:hover{
+    transition: 0.9s all ease-in;
+}
+
+.menu-links li a i {
+    margin-left: 15px;
+    margin-right: 20px
+}
+
+.menu-links li a:hover {
+
+    transition: 0.8s all;
+    background-color: var(--primary-color);
+    background-color: #33736223;
+    /* color: black; */
+}
+
+.menu-links li,
+.menu-links li :hover {
+    color: black
+}
+.headings{
+    background-color: #337362;
+}
+
+@media screen and (width:902) {
+    .profession{
+        background-color: red;
+    }
+
+    .logo-text{
+        color: red;
+        background-color: green;
+    }
+}
+@media (max-width: 1250px) {
+}
+
+@media screen and (max-width: 768px) {
+    body{
+        background-color: red;
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#headTab table {
+    width: 100% !important;
+    margin-bottom: 0;
+}
+
+#attTab table {
+    width: 80% !important;
+}
+
+#mainHead {
+    max-width: 85%;
+    border-radius: 1.5rem;
+}
+
+#headTab {
+    background-color: #164630b8;
+    color: white;
+    max-width: 80%;
+}
+
+#rollNo {
+    text-align: center;
+}
+
+.na {
+    color: red;
+}
+
+td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Inder's css  */
+
+@media screen and (max-width:1231px) {
+    .attendance-table .tabl tr {
+        font-size: 85%;
+        transition: 0.6s all;
+    }
+}
+
+
+
+@media screen and (max-width:1193px) {
+    .profession {
+        font-size: 10px;
+    }
+
+    @media screen and (max-width:1179px) {
+        .stud-text {
+            font-size: small;
+        }
+    }
+
+    @media screen and (max-width:1056px) {
+        .uniName {
+            font-size: 12px;
+        }
+
+        .profession {
+            font-size: 8px;
+        }
+
+        .nav-text {
+            font-size: 14px;
+        }
+
+    }
+
+    @media (max-width:1168px) and (min-width:1055px) {
+        .profession {
+            font-size: 11px;
+        }
+    }
+
+    @media screen and (max-width:894px) {
+        .uniName {
+            font-size: 10px;
+        }
+
+        .profession {
+            font-size: 6px;
+        }
+
+        .nav-text {
+            font-size: 12px;
+        }
+
+        .menu-links .nav-link a .nav-text {
+            display: none;
+
+        }
+
+        .menu-links .nav-link a i {
+            margin-left: auto;
+            margin-right: auto;
+
+        }
+    }
+
+    @media screen and (max-width:576px) {
+        .logo-text {
+            display: none;
+        }
+
+        .logoImg {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .stud-text {
+            display: none;
+        }
+
+        .stud-image {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .active-cont #menu-btn {
+            /* background-color: red; */
+            /* width: 20px; */
+            height: 10px;
+            margin-left: 30px;
+        }
+    }
+
+
+
+    @media screen and (max-width:1061px) {
+        .attendance-table .tabl tr {
+            font-size: 78%;
+            transition: 0.6s all;
+        }
+    }
+
+    @media screen and (max-width:991px) {
+        .attendance-table .tabl tr {
+            font-size: 70%;
+            transition: 0.6s all;
+        }
+    }
+
+    @media screen and (max-width:890px) {
+        .attendance-table .tabl tr {
+            font-size: 65%;
+            transition: 0.6s all;
+        }
+    }
+
+    @media screen and (max-width:805px) {
+        .attendance-table .tabl tr {
+            font-size: 60%;
+            transition: 0.6s all;
+        }
+    }
+
+    @media screen and (max-width:762px) {
+        .attendance-table .tabl tr {
+            font-size: 55%;
+            transition: 0.6s all;
+        }
+    }
+
+    @media screen and (max-width:718px) {
+        .attendance-table .tabl tr {
+            font-size: 50%;
+            transition: 0.6s all;
+        }
+    }
+
+    @media screen and (max-width:565px) {
+        .attendance-table .tabl tr {
+            font-size: 45%;
+            transition: 0.6s all;
+        }
+    }
+}
