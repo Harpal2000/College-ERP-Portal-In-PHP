@@ -52,7 +52,8 @@ if (isset($_POST['edit'])) {
         $update_result = mysqli_query($connection, $update_query);
 
         if ($update_result) {
-            echo "<script>alert('Update Successfully')</script>";
+            echo "<script>alert('Update Successfully');</script>";
+            echo "<script>window.location.href = 'teach_profile.php?t_name=$teacherName';</script>";
             exit();
         } else {
             echo "<script>alert('Failed to Update');</script>";
@@ -200,6 +201,27 @@ if (isset($_POST['edit'])) {
                 margin-left: 30px;
             }
         }
+
+        .modal-content {
+            width: 80%;
+            max-width: 600px;
+            height: 85%;
+            max-height: 640px;
+            padding: 20px;
+            margin: auto;
+        }
+
+        .cont-label {
+            font-weight: bold;
+        }
+
+        .form-control:focus {
+            box-shadow: none;
+        }
+
+        .btn-close:focus {
+            box-shadow: none;
+        }
     </style>
 </head>
 
@@ -216,52 +238,60 @@ if (isset($_POST['edit'])) {
                 </div>
                 <div class="modal-body">
                     <form class="form-horizontal" method="POST" action="" enctype="multipart/form-data">
-                        <div class="form-group mb-3">
-                            <label for="firstname" class="col-sm-3 control-label mb-0">Teacher Name</label>
+                        <div class="form-group row mb-3">
+                            <label for="firstname" class="col-sm-3 col-form-label cont-label">Teacher Name</label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control" id="nameE" name="nameE"
                                     value="<?php echo $data['t_name']; ?>">
                             </div>
                         </div>
-                        <div class="form-group mb-3">
-                            <label for="lastname" class="col-sm-3 control-label mb-0">Contact Info</label>
+
+                        <div class="form-group row mb-3">
+                            <label for="lastname" class="col-sm-3 col-form-label cont-label">Contact Info</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="phoneE" name="phoneE"
+                                <input type="text" class="form-control" id="phoneE" name="phoneE" max-length="10"
                                     value="<?php echo $data['t_phone']; ?>">
                             </div>
                         </div>
-                        <div class="form-group mb-3">
-                            <label for="email" class="col-sm-3 control-label mb-0">Email</label>
+
+                        <div class="form-group row mb-3">
+                            <label for="email" class="col-sm-3 col-form-label cont-label">Email</label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control" id="emailE" name="emailE"
                                     value="<?php echo $data['t_email']; ?>">
                             </div>
                         </div>
-                        <div class="form-group mb-3">
-                            <label for="address" class="col-sm-3 control-label mb-0">Address</label>
+
+                        <div class="form-group row mb-3">
+                            <label for="address" class="col-sm-3 col-form-label cont-label">Address</label>
                             <div class="col-sm-9">
                                 <textarea class="form-control" id="addressE"
                                     name="addressE"><?php echo $data['t_address']; ?></textarea>
                             </div>
                         </div>
-                        <div class="form-group mb-3">
-                            <label for="photo" class="col-sm-3 control-label mb-0">Photo</label>
+
+                        <div class="form-group row mb-3">
+                            <label for="photo" class="col-sm-3 col-form-label cont-label">Photo</label>
                             <div class="col-sm-9">
                                 <input type="file" id="photo" name="photo">
                             </div>
                         </div>
+
                         <hr>
-                        <div class="form-group mb-3">
-                            <label for="curr_password" class="col-sm-3 control-label mb-0">Current Password</label>
+
+                        <div class="form-group row mb-3">
+                            <label for="curr_password" class="col-sm-3 col-form-label cont-label">Current
+                                Password</label>
                             <div class="col-sm-9">
                                 <input type="password" class="form-control" id="curr_password" name="curr_password"
-                                    placeholder="input current password to save changes" required>
+                                    placeholder="Input current password to save changes" required>
                             </div>
                         </div>
+
                 </div>
-                <div class="modal-footer justify-content-start">
-                    <button type="button" class="btn btn-default btn-flat me-auto" data-bs-dismiss="modal"><i
-                            class="fa fa-close"></i> Close</button>
+                <div class="modal-footer justify-content-end">
+                    <!-- <button type="button" class="btn btn-default btn-flat me-auto" data-bs-dismiss="modal"><i
+                            class="fa fa-close"></i> Close</button> -->
                     <button type="submit" class="btn btn-success btn-flat" name="edit"><i
                             class="fa fa-check-square-o"></i>
                         Update</button>
