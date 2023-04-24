@@ -13,13 +13,42 @@ require '../connection.php';
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.2/css/jquery.dataTables.min.css">
+    <style>
+        body {
+            background-color: rgb(226, 226, 226);
+
+        }
+
+        .modal-content {
+            width: 80%;
+            max-width: 600px;
+            height: 85%;
+            max-height: 640px;
+            padding: 20px;
+            margin: auto;
+        }
+
+        .cont-label {
+            font-weight: bold;
+        }
+
+        .form-control:focus {
+            box-shadow: none;
+        }
+
+        .btn-close:focus {
+            box-shadow: none;
+        }
+    </style>
+
 </head>
 
 <body>
     <br>
     <div class="container-fluid">
         <a href="admin-index.php"><button type="button" class="btn btn-secondary btn-sm">Main Dashboard</button></a>
-        <a href="teacher_register.php"><button type="button" class="btn btn-secondary btn-sm">Teacher Register</button></a>
+        <a href="teacher_register.php"><button type="button" class="btn btn-secondary btn-sm">Teacher
+                Register</button></a>
     </div>
     <div id="records">
 
@@ -75,7 +104,7 @@ require '../connection.php';
                                         <?php echo $data['t_id']; ?>
                                     </td>
                                     <td>
-                                        <?php echo $data['t_name'] ." ". "(" . $data['t_stream'] ." )" ; ?>
+                                        <?php echo $data['t_name'] . " " . "(" . $data['t_stream'] . " )"; ?>
                                     </td>
                                     <td>
                                         <?php echo $data['t_pass']; ?>
@@ -95,14 +124,18 @@ require '../connection.php';
                                         <?php echo $data['t_phone']; ?>
                                     </td>
                                     <td class="text-center">
-                                        <button class="btn btn-sm btn-outline-primary edit_course" type="button">Edit</button>
-                                        <button class="btn btn-sm btn-outline-danger delete_course" type="button">Delete</button>
+                                        <button class="btn btn-sm btn-outline-primary edit_course" type="button"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#edit-<?php echo $data['t_id']; ?>">Edit</button>
+
+                                        <button class="btn btn-sm btn-outline-danger delete_course"
+                                            type="button">Delete</button>
                                     </td>
                                 </tr>
+                                <?php include 'update_teach.php'; ?>
                                 <?php
                             }
                         }
-
                         ?>
                     </tbody>
                 </table>
@@ -121,7 +154,23 @@ require '../connection.php';
         $(document).ready(function () {
             $('#myTable').DataTable();
         });
+
+        $(document).ready(function () {
+            $(".edit_course").click(function () {
+                var t_id = $(this).closest("tr").find("td:first-child").text();
+                var t_name = $(this).closest("tr").find("td:nth-child(2)").text();
+                var t_phone = $(this).closest("tr").find("td:nth-child(5)").text();
+                var t_email = $(this).closest("tr").find("td:nth-child(4) i:first-child").text();
+                var t_address = $(this).closest("tr").find("td:nth-child(4) i:last-child").text();
+
+                $("#edit-" + t_id + " #nameE").val(t_name);
+                $("#edit-" + t_id + " #phoneE").val(t_phone);
+                $("#edit-" + t_id + " #emailE").val(t_email);
+                $("#edit-" + t_id + " #addressE").val(t_address);
+            });
+        });
     </script>
+
 
 </body>
 
