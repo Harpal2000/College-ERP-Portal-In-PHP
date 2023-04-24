@@ -261,7 +261,7 @@ if (isset($_GET['subject_code'])) {
 
     <script>
         function confirmDelete(subjectCode) {
-            alert(subjectCode);
+            //alert(subjectCode);
             if (confirm("Are you sure you want to delete this course?")) {
 
                 $.ajax({

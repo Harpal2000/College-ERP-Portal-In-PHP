@@ -48,12 +48,34 @@ if (isset($_GET["action"]) && $_GET["action"] == "update_sub") {
     }
 }
 
+
+// Delete subject 
+
 if (isset($_GET["action"]) && $_GET["action"] == "delete_subject") {
     if (isset($_POST["subject_code"]) && !empty($_POST["subject_code"])) {
 
         $subjectCode = $_POST["subject_code"];
 
         $delete_query = "DELETE FROM subject_record WHERE subject_code = '$subjectCode'";
+
+        if (mysqli_query($connection, $delete_query)) {
+            $response["success"] = true;
+            $response["message"] = "Record deleted successfully";
+        } else {
+            $response["success"] = false;
+            $response["message"] = "Error inserting record";
+        }
+    }
+}
+
+// Delete Course
+
+if (isset($_GET["action"]) && $_GET["action"] == "delete_course") {
+    if (isset($_POST["subject_id"]) && !empty($_POST["subject_id"])) {
+
+        $subjectId = $_POST["subject_id"];
+
+        $delete_query = "DELETE FROM Courses d WHERE id = '$subjectId'";
 
         if (mysqli_query($connection, $delete_query)) {
             $response["success"] = true;

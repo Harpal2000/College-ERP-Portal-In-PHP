@@ -123,10 +123,10 @@ $result = mysqli_query($connection, $course_query);
                                                         </b></p>
                                                 </td>
                                                 <td class="text-center">
-                                                    <button class="btn btn-sm btn-outline-primary edit_course" type="button"
-                                                        data-id="<?php echo $row['id'] ?>">Edit</button>
+                                                    <button class="btn btn-sm btn-outline-primary edit_course"
+                                                        type="button">Edit</button>
                                                     <button class="btn btn-sm btn-outline-danger delete_course" type="button"
-                                                        data-id="<?php echo $row['id'] ?>">Delete</button>
+                                                        onclick="confirmDelete('<?php echo $row['id'] ?>')">Delete</button>
                                                 </td>
                                             </tr>
                                             <?php
@@ -308,6 +308,25 @@ $result = mysqli_query($connection, $course_query);
                 "pageLength": 5
             });
         });
+
+        function confirmDelete(courseId) {
+            alert(courseId);
+            if (confirm("Are you sure you want to delete this course?")) {
+
+                $.ajax({
+                    url: 'ajax2.php?action=delete_course',
+                    method: 'POST',
+                    data: { subject_id: courseId },
+                    success: function (data) {
+                        alert('Course Delete successfully');
+                        setTimeout(function () {
+                            location.reload()
+                        }, 1000)
+                    }
+                })
+
+            }
+        }
     </script>
 
     <script>
