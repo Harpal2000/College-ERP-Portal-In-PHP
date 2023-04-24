@@ -25,6 +25,8 @@ if (!isset($_SESSION['LoginTeacher'])) {
     <style>
         body {
             background-color: rgb(226, 226, 226);
+            display: flex;
+            justify-content: center;
         }
 
         table {
@@ -37,6 +39,15 @@ if (!isset($_SESSION['LoginTeacher'])) {
 
         .form-control:focus {
             box-shadow: none;
+        }
+
+        .header-sec {
+            display: flex;
+            color: white;
+            background-color: #337362;
+            padding: 1%;
+            display: flex;
+            align-items: center;
         }
     </style>
 
@@ -93,7 +104,7 @@ if (isset($_POST['submit_assignment'])) {
 
 
 <body>
-    <center class="mt-2" style="background-color:white; width:98vw; height:100vh">
+    <center class="mt-2" style="background-color:white; width:98vw; height:95vh">
         <?php
 
         if (isset($_GET['t_name'])) {
@@ -103,19 +114,19 @@ if (isset($_POST['submit_assignment'])) {
         '$t_name' and subject_type = 'lecture'";
         $result = mysqli_query($connection, $query);
         ?>
-        <div class="header-sec d-flex" style="color:white; background-color:#337362;padding:1%; justify-content-center">
-            <div>
-                <a href="../teacher/teacher-index.php"><button type="button" class="btn"
-                        style="background-color:white;color:black;"> <i class='bx bx-home-alt icon'></i>
-                        Dashboard</button></a>
-            </div>
-            <div style="padding-left:20%">
-                <h2 class="">Upload Your Assignments Here</h2>
+        <div class="header-sec">
+            <a href="../teacher/teacher-index.php"><button type="button" class="btn"
+                    style="background-color:white;color:black;"> <i
+                        class='bx bx-home-alt icon'></i>Dashboard</button></a>
+            <div style="margin: auto; text-align:center;">
+                <h2>Upload Your Assignments Here</h2>
             </div>
         </div>
+
+
         <!-- <hr color="black" width="70%"> -->
-        <div style="border:1px solid black; width:85%;margin-top:1%">
-            <table border="1" class="table table-condensed table-bordered table-hover mt-4">
+        <div style="width:85%;margin-top:3%">
+            <table border="1" class="table table-condensed table-bordered mt-4">
                 <caption align="top">Assignment-1</caption>
                 <tr align="center" style="color:white; background-color:#337362">
                     <th>subject_code</th>
@@ -194,7 +205,7 @@ if (isset($_POST['submit_assignment'])) {
         '$t_name' and subject_type = 'lecture'";
             $result = mysqli_query($connection, $query);
             ?>
-            <table border="1" class="table table-condensed table-bordered table-hover mt-4">
+            <table border="1" class="table table-condensed table-bordered mt-5">
                 <caption align="top">Assignment-2</caption>
                 <tr align="center" style="color:white; background-color:#337362">
                     <th>subject_code</th>
@@ -283,10 +294,9 @@ if (isset($_POST['submit_assignment'])) {
                         </div>
                         <div class="form-group row mb-2">
                             <div class="col-sm-12 mb-4">
-                                <label for="Assignment" class="form-label">Upload Assignment <p style="margin:0;">
-                                        <i>File size less than
-                                            10MB</i>
-                                    </p></label>
+                                <label for="Assignment" class="form-label">Upload Assignment (File size < 10MB) <p
+                                        style="margin:0;">
+                                        </p></label>
                                 <input type="file" name="assignment_file" class="form-control" required>
                             </div>
                         </div>
