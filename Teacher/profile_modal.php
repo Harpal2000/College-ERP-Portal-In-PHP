@@ -1,12 +1,6 @@
 <?php
 require '../connection.php';
 
-if (!isset($_SESSION['LoginTeacher'])) {
-    echo "<script>alert('session break')</script>";
-    header('Location:../login.php');
-}
-
-
 
 if (isset($_POST['edit'])) {
     $name = $_POST['nameE'];
@@ -14,6 +8,27 @@ if (isset($_POST['edit'])) {
     $email = $_POST['emailE'];
     $address = $_POST['addressE'];
     $password = $_POST['curr_password'];
+
+    if (empty($_POST['nameE']) || !preg_match("/^[a-zA-Z ]*$/", $_POST['nameE'])) {
+        echo "<script>alert('Please enter a valid name')</script>";
+        exit();
+    }
+
+    if (empty($_POST['phoneE']) || !preg_match("/^[0-9]*$/", $_POST['phoneE']) || strlen($_POST['phoneE']) != 10) {
+        echo "<script>alert('Please enter a valid phone number')</script>";
+        exit();
+    }
+
+    if (empty($_POST['emailE']) || !filter_var($_POST['emailE'], FILTER_VALIDATE_EMAIL)) {
+        echo "<script>alert('Please enter a valid email address')</script>";
+        exit();
+    }
+
+    if (empty($_POST['addressE'])) {
+        echo "<script>alert('Please enter a valid address')</script>";
+        exit();
+    }
+
 
     $teacherName = $_GET['t_name'];
     $check_password_query = "SELECT t_pass FROM teacher_record WHERE t_name = '$teacherName' AND t_pass = '$password'";
@@ -48,8 +63,6 @@ if (isset($_POST['edit'])) {
         echo "Incorrect password";
     }
 }
-
-
 ?>
 
 

@@ -1,13 +1,6 @@
 <?php
 
 require '../connection.php';
-
-session_start();
-
-if (!isset($_SESSION['LoginStudent'])) {
-    header('Location:login.php');
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -172,8 +165,8 @@ if (!isset($_SESSION['LoginStudent'])) {
             <div class="studName mx-2 d-flex flex-lg-row flex-sm-column ">
                 <span class="stud-image"><a href="stuProfile.php" style="text-decoration:none;color:white;">
                         <?php
-                        $stu_roll_no = $_SESSION['LoginStudent'];
-                        $query = "select * from student_record where roll_no = $stu_roll_no";
+                        $teacherName = $_GET['t_name'];
+                        $query = "select * from teacher_record where t_name = '$teacherName'";
 
                         $result = mysqli_query($connection, $query);
                         ?>
@@ -182,8 +175,8 @@ if (!isset($_SESSION['LoginStudent'])) {
                             while ($data = mysqli_fetch_assoc($result)) {
                                 ?>
                                 <?php
-                                $image = $data['s_image'];
-                                $image_src = "../Admin/student_image/" . $image;
+                                $image = $data['t_image'];
+                                $image_src = "teacher_profile/" . $image;
                                 ?>
                                 <img src="<?php echo $image_src; ?>" alt="" width="35px">
 
@@ -191,7 +184,7 @@ if (!isset($_SESSION['LoginStudent'])) {
                         </span>
                         <div class="stud-text text " style="font-weight: 100; text-align: center; margin-left: 10px;">
                             <span>
-                                <?php echo $data['s_name']; ?>
+                                <?php echo $data['t_name']; ?>
                             </span> </a>
                         </div>
 
@@ -207,50 +200,44 @@ if (!isset($_SESSION['LoginStudent'])) {
 
             <ul class="menu-links " style="padding-left: 0;">
                 <li class="nav-link">
-                    <a href="student-index.php" class="mx-auto" style="">
+                    <a href="../teacher/teacher-index.php" class="mx-auto" style="">
                         <i class='bx bx-home-alt icon'></i>
-                        <span class="text nav-text ">Dashboard </span>
+                        <span class="text nav-text ">Dashboard</span>
+
+                    </a>
+                </li>
+                <li class="nav-link">
+                    <a href="student_att.php?t_name=<?php echo $_SESSION['LoginTeacher']; ?>" class="mx-auto" style="">
+                        <i class='bx bx-calendar-check icon'></i>
+                        <span class="text nav-text ">Attendance</span>
 
                     </a>
                 </li>
 
                 <li class="nav-link">
-                    <a href="view_assignments.php">
+                    <a href="upload_assignments.php?t_name=<?php echo $_SESSION['LoginTeacher']; ?>">
                         <i class='bx bx-bar-chart-alt-2 icon'></i>
-                        <span class="text nav-text">Assignments</span>
+                        <span class="text nav-text">Upload Assignments</span>
                     </a>
                 </li>
 
                 <li class="nav-link">
-                    <a href="internal_marks.php">
+                    <a href="stu_internal_mark.php?t_name=<?php echo $_SESSION['LoginTeacher']; ?>">
                         <i class='bx bx-pie-chart-alt icon'></i>
-                        <span class="text nav-text">Internal Marks</span>
+                        <span class="text nav-text">Upload Marks</span>
                     </a>
                 </li>
-
                 <li class="nav-link">
-                    <a href="stuProfile.php">
-                        <i class='bx bx-user icon'></i>
+                    <a href="teach_profile.php?t_name=<?php echo $_SESSION['LoginTeacher']; ?>">
+                        <i class='bx bx-pie-chart-alt icon'></i>
                         <span class="text nav-text">Profile</span>
                     </a>
                 </li>
 
-                <li class="nav-link">
-                    <a href="pay_fee.php">
-                        <i class='bx bx-wallet icon'></i>
-                        <span class="text nav-text">Pay Fee</span>
-                    </a>
-                </li>
 
-                <!-- <li class="nav-link">
-                    <a href="#">
-                        <i class='bx bx-wallet icon'></i>
-                        <span class="text nav-text">Fee Receipt</span>
-                    </a>
-                </li> -->
                 <li class="logout text-center nav-link"
                     style="position: absolute;bottom: 10px; right: 0; left: 0;text-align: center;">
-                    <a href="#">
+                    <a href="../login.php">
                         <i class='bx bx-log-out icon'></i>
                         <span class="text nav-text">Logout</span>
                     </a>
