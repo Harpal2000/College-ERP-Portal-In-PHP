@@ -36,7 +36,7 @@ if (isset($_GET['t_name'])) {
 
         .my-custom-scrollbar {
             position: relative;
-            height: 65vh;
+            height: 75vh;
             overflow: auto;
         }
 
@@ -59,6 +59,27 @@ if (isset($_GET['t_name'])) {
             background-color: #fff;
             color: #333;
         }
+
+        .header-sec {
+            display: flex;
+            color: white;
+            background-color: #337362;
+            padding: 1%;
+            display: flex;
+            align-items: center;
+        }
+
+        .container-fluid {
+            padding: 0;
+        }
+
+        .table thead th {
+            vertical-align: -webkit-baseline-middle;
+        }
+
+        .form-control:focus {
+            box-shadow: none;
+        }
     </style>
 </head>
 
@@ -70,30 +91,30 @@ if (isset($_GET['t_name'])) {
     ?>
 
     <div class="container-fluid">
-        <div class="modal-header" style="background-color:#356155;color:white;">
-            <h2 class="modal-title">Upload Assignment and Internal Marks</h2>
-            <span>
-                <a href="../teacher/teacher-index.php"><button type="button" class="btn"
-                        style="background-color:white;color:black;"> <i class='bx bx-home-alt icon'></i>
-                        Dashboard</button></a>
-            </span>
+        <div class="header-sec">
+            <a href="../teacher/teacher-index.php"><button type="button" class="btn"
+                    style="background-color:white;color:black;"> <i
+                        class='bx bx-home-alt icon'></i>Dashboard</button></a>
+            <div style="margin: auto; text-align:center;">
+                <h2>Upload Internal Marks</h2>
+            </div>
         </div>
-        <div class="container-fluid">
+        <div class="container-fluid" style="padding:15px">
             <div class="row">
                 <div class="col-md-6">
                     <div id="left-side-cont">
                         <form method="post" action="">
-                            <table border='1' id="SelectClassTable" cellpadding='6'
-                                class="table table-condensed table-bordered table-hover mt-4">
+                            <table id="SelectClassTable" class="table table-condensed table-hover mt-4">
                                 <thead>
                                     <tr align="center">
                                         <th align="center">
-                                            Select Class For Upload Marks
+                                            Choose Class
                                         </th>
                                         <td>
                                             <select class="form-select form-select-lg custom-select"
                                                 aria-label=".form-select-lg example" name="select">
-                                                <option selected disabled>------------- Select Your Class ------------
+                                                <option selected disabled>----------------- Select Your Class
+                                                    ----------------
                                                 </option>
                                                 <?php
                                                 if (mysqli_num_rows($QueryResult) > 0) {
@@ -111,12 +132,13 @@ if (isset($_GET['t_name'])) {
                                     </tr>
                                     <tr align="center">
                                         <th>
-                                            Select Subject Name
+                                            Choose Subject-Name
                                         </th>
                                         <td>
                                             <select class="form-select form-select-lg custom-select"
                                                 aria-label=".form-select-lg example" name="select2">
-                                                <option selected disabled>------------ Select Your Subject ------------
+                                                <option selected disabled>---------------- Select Your Subject
+                                                    ----------------
                                                 </option>
                                                 <?php
                                                 $Query = "SELECT DISTINCT subject_name,class FROM timetable WHERE faculty_name = '$teacherName'";
@@ -136,12 +158,13 @@ if (isset($_GET['t_name'])) {
                                     </tr>
                                     <tr align="center">
                                         <th>
-                                            Upload Assignment Marks or MST-Marks
+                                            Choose Assignment/MST
                                         </th>
                                         <td>
                                             <select class="form-select form-select-lg custom-select"
                                                 aria-label=".form-select-lg example" name="select3">
-                                                <option selected disabled>--------- Select Assignment/MST ----------
+                                                <option selected disabled>------------- Select Assignment/MST
+                                                    --------------
                                                 </option>
                                                 <option value="Assignment Marks">Assignment Marks</option>
                                                 <option value="MST Marks">MST Marks</option>
@@ -150,7 +173,7 @@ if (isset($_GET['t_name'])) {
                                     </tr>
                                     <tr align="center">
                                         <th>
-                                            Enter Assignment/MST No. Here
+                                            Enter Assignment/MST No
                                         </th>
                                         <td>
                                             <div class="input-group mb-3">
@@ -230,8 +253,8 @@ if (isset($_GET['t_name'])) {
                         ?>
                                     <tr align="center">
                                         <td colspan="5">
-                                            <input type="submit" name="marks_btn" class="btn btn-dark btn-sm"
-                                                value="Upload Marks">
+                                            <input type="submit" name="marks_btn" class="btn btn-dark btn-sm w-100 p-2"
+                                                value="Upload">
 
                                         </td>
                                     </tr>
@@ -253,6 +276,19 @@ if (isset($_GET['t_name'])) {
             $selected_class = $_POST['class'];
             $selected_assMst = $_POST['assMst'];
             $selected_assMstNo = $_POST['assMstNo'];
+
+            $valid_marks = true;
+            foreach ($marks as $m) {
+                if (!is_numeric($m)) {
+                    $valid_marks = false;
+                    break;
+                }
+            }
+            if (!$valid_marks) {
+                echo "<script>alert('Invalid marks entered');</script>";
+                exit;
+            }
+
 
             for ($i = 0; $i < count($marks); $i++) {
                 $id = $student_ids[$i];
