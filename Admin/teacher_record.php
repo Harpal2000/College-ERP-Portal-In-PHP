@@ -128,8 +128,8 @@ require '../connection.php';
                                             data-bs-toggle="modal"
                                             data-bs-target="#edit-<?php echo $data['t_id']; ?>">Edit</button>
 
-                                        <button class="btn btn-sm btn-outline-danger delete_course"
-                                            type="button">Delete</button>
+                                        <button class="btn btn-sm btn-outline-danger delete_course" type="button"
+                                            onclick="confirmDelete('<?php echo $data['t_id'] ?>')">Delete</button>
                                     </td>
                                 </tr>
                                 <?php include 'update_teach.php'; ?>
@@ -169,6 +169,25 @@ require '../connection.php';
                 $("#edit-" + t_id + " #addressE").val(t_address);
             });
         });
+
+        function confirmDelete(teachId) {
+            // alert(teachId);
+            if (confirm("Are you sure you want to delete this course?")) {
+
+                $.ajax({
+                    url: 'ajax2.php?action=delete_teacher',
+                    method: 'POST',
+                    data: { teach_id: teachId },
+                    success: function (data) {
+                        alert('Course Delete successfully');
+                        setTimeout(function () {
+                            location.reload()
+                        }, 1000)
+                    }
+                })
+
+            }
+        }
     </script>
 
 

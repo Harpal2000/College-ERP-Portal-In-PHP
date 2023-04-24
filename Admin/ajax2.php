@@ -75,7 +75,25 @@ if (isset($_GET["action"]) && $_GET["action"] == "delete_course") {
 
         $subjectId = $_POST["subject_id"];
 
-        $delete_query = "DELETE FROM Courses d WHERE id = '$subjectId'";
+        $delete_query = "DELETE FROM Courses WHERE id = '$subjectId'";
+
+        if (mysqli_query($connection, $delete_query)) {
+            $response["success"] = true;
+            $response["message"] = "Record deleted successfully";
+        } else {
+            $response["success"] = false;
+            $response["message"] = "Error inserting record";
+        }
+    }
+}
+// Delete Teacher
+
+if (isset($_GET["action"]) && $_GET["action"] == "delete_teacher") {
+    if (isset($_POST["teach_id"]) && !empty($_POST["teach_id"])) {
+
+        $teachId = $_POST["teach_id"];
+
+        $delete_query = "DELETE FROM teacher_record WHERE t_id = '$teachId'";
 
         if (mysqli_query($connection, $delete_query)) {
             $response["success"] = true;

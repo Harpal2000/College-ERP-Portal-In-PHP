@@ -310,7 +310,7 @@ $result = mysqli_query($connection, $course_query);
         });
 
         function confirmDelete(courseId) {
-            alert(courseId);
+            // alert(courseId);
             if (confirm("Are you sure you want to delete this course?")) {
 
                 $.ajax({
